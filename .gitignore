@@ -13,4 +13,4 @@
 
 # Temporary test files
 *.png
-!docs/*.png
+!docs/*.pngresources/

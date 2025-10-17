@@ -1,244 +1,138 @@
 #!/usr/bin/env python3
 """
-서버의 Room API 데이터를 정확히 디코딩
-브라우저 TypeScript 로직과 동일하게 구현
+SCUMM v3 정확한 디코딩 - SMAP 방식
 """
-import urllib.request
 from PIL import Image
 
-# EGA 16-color palette
 EGA_PALETTE = [
-    (0x00, 0x00, 0x00),  # 0: Black
-    (0x00, 0x00, 0xAA),  # 1: Blue
-    (0x00, 0xAA, 0x00),  # 2: Green
-    (0x00, 0xAA, 0xAA),  # 3: Cyan
-    (0xAA, 0x00, 0x00),  # 4: Red
-    (0xAA, 0x00, 0xAA),  # 5: Magenta
-    (0xAA, 0x55, 0x00),  # 6: Brown
-    (0xAA, 0xAA, 0xAA),  # 7: Light Gray
-    (0x55, 0x55, 0x55),  # 8: Dark Gray
-    (0x55, 0x55, 0xFF),  # 9: Light Blue
-    (0x55, 0xFF, 0x55),  # 10: Light Green
-    (0x55, 0xFF, 0xFF),  # 11: Light Cyan
-    (0xFF, 0x55, 0x55),  # 12: Light Red
-    (0xFF, 0x55, 0xFF),  # 13: Light Magenta
-    (0xFF, 0xFF, 0x55),  # 14: Yellow
-    (0xFF, 0xFF, 0xFF),  # 15: White
+    (0x00, 0x00, 0x00), (0x00, 0x00, 0xAA), (0x00, 0xAA, 0x00), (0x00, 0xAA, 0xAA),
+    (0xAA, 0x00, 0x00), (0xAA, 0x00, 0xAA), (0xAA, 0x55, 0x00), (0xAA, 0xAA, 0xAA),
+    (0x55, 0x55, 0x55), (0x55, 0x55, 0xFF), (0x55, 0xFF, 0x55), (0x55, 0xFF, 0xFF),
+    (0xFF, 0x55, 0x55), (0xFF, 0x55, 0xFF), (0xFF, 0xFF, 0x55), (0xFF, 0xFF, 0xFF),
 ]
 
-def decode_strip_v3(data, height):
-    """ScummVM drawStripEGA - 정확한 구현"""
-    dst = [[0 for _ in range(8)] for _ in range(height)]
+def drawStripEGA(src, height):
+    """ScummVM drawStripEGA"""
+    pixels = [[0 for _ in range(8)] for _ in range(height)]
+    color, run, x, y, src_idx = 0, 0, 0, 0, 0
 
-    color = 0
-    run = 0
-    x = 0
-    y = 0
-    offset = 0
-
-    while x < 8:
-        if offset >= len(data):
-            break
-
-        color = data[offset]
-        offset += 1
+    while x < 8 and src_idx < len(src):
+        color = src[src_idx]
+        src_idx += 1
 
         if color & 0x80:
             run = color & 0x3F
-
-            if color & 0x40:  # 0xC0-0xFF: Two-color dithering
-                if offset >= len(data):
-                    break
-                color = data[offset]
-                offset += 1
-
+            if color & 0x40:  # Two-color dithering
+                if src_idx >= len(src): break
+                color = src[src_idx]
+                src_idx += 1
                 if run == 0:
-                    if offset >= len(data):
-                        break
-                    run = data[offset]
-                    offset += 1
-
+                    if src_idx >= len(src): break
+                    run = src[src_idx]
+                    src_idx += 1
                 for z in range(run):
-                    if y < height and x < 8:
+                    if x >= 8: break  # Stop at strip boundary
+                    if y < height:
                         pixel_color = (color & 0xF) if (z & 1) else (color >> 4)
-                        dst[y][x] = pixel_color
+                        pixels[y][x] = pixel_color
                     y += 1
-                    if y >= height:
-                        y = 0
-                        x += 1
-
-            else:  # 0x80-0xBF: Repeat previous pixel
+                    if y >= height: y, x = 0, x + 1
+            else:  # Repeat previous
                 if run == 0:
-                    if offset >= len(data):
-                        break
-                    run = data[offset]
-                    offset += 1
-
+                    if src_idx >= len(src): break
+                    run = src[src_idx]
+                    src_idx += 1
                 for z in range(run):
-                    if y < height and x < 8:
-                        dst[y][x] = dst[y][x - 1] if x > 0 else 0
+                    if x >= 8: break  # Stop at strip boundary
+                    if y < height:
+                        pixels[y][x] = pixels[y][x - 1] if x > 0 else 0
                     y += 1
-                    if y >= height:
-                        y = 0
-                        x += 1
-
-        else:  # 0x00-0x7F: Single color run
+                    if y >= height: y, x = 0, x + 1
+        else:  # Single color
             run = color >> 4
             if run == 0:
-                if offset >= len(data):
-                    break
-                run = data[offset]
-                offset += 1
-
+                if src_idx >= len(src): break
+                run = src[src_idx]
+                src_idx += 1
+            pixel_color = color & 0xF
             for z in range(run):
-                if y < height and x < 8:
-                    dst[y][x] = color & 0xF
+                if x >= 8: break  # Stop at strip boundary
+                if y < height:
+                    pixels[y][x] = pixel_color
                 y += 1
-                if y >= height:
-                    y = 0
-                    x += 1
+                if y >= height: y, x = 0, x + 1
 
-    return dst
+    return pixels
 
-def decode_object_image(data, height=144):
-    """
-    ScummV3Decoder.decodeObjectImage()와 동일한 로직
-    """
-    if len(data) < 8:
-        return None, None, None
+# XOR decrypt
+with open('01.LFL', 'rb') as f:
+    encrypted = f.read()
+decrypted = bytes([b ^ 0xFF for b in encrypted])
 
-    # Skip 0x00 padding
-    offset = 0
-    while offset < len(data) and data[offset] == 0x00:
-        offset += 1
+# Room dimensions
+width = decrypted[4] | (decrypted[5] << 8)
+height = decrypted[6] | (decrypted[7] << 8)
 
-    print(f"헤더 패딩: {offset} bytes")
+print(f"🎮 Room 01 디코딩")
+print(f"  크기: {width}×{height}")
 
-    if offset + 1 >= len(data):
-        return None, None, None
+# Resource 0 = SMAP
+smap_ptr = 0x0135  # Resource 0 offset
 
-    # Read first word
-    first_word = data[offset] | (data[offset + 1] << 8)
-    file_size = len(data) - offset
+# Read strip offsets (16-color: smap_ptr + 2 + stripnr * 2)
+strip_offsets = []
+for strip_idx in range(100):
+    offset_pos = smap_ptr + 2 + strip_idx * 2
+    if offset_pos + 1 >= len(decrypted):
+        break
 
-    print(f"첫 번째 word: 0x{first_word:04x} ({first_word})")
-    print(f"파일 크기: {file_size} bytes")
+    strip_offset = decrypted[offset_pos] | (decrypted[offset_pos + 1] << 8)
+    if strip_offset == 0 or smap_ptr + strip_offset >= len(decrypted):
+        break
 
-    # Format detection (TypeScript와 동일)
-    is_format_a = abs(first_word - file_size) < file_size * 0.1
-    is_format_b = first_word < 1000 and first_word < file_size
-    is_format_c = first_word > file_size
+    strip_offsets.append(smap_ptr + strip_offset)
 
-    print(f"포맷 감지: A={is_format_a}, B={is_format_b}, C={is_format_c}")
+num_strips = len(strip_offsets)
+print(f"  Strips: {num_strips}")
 
-    if is_format_c:
-        print("Format C: Raw 포맷 - 지원하지 않음")
-        return None, None, None
+# Use declared width, not strip count
+print(f"  디코딩 너비: {width}×{height} (strip {num_strips}개)")
 
-    # Format B (서버 재구성 데이터): offset table이 offset+0부터 시작
-    # Format A (원본 LFL): offset table이 offset+2부터 시작
-    table_start = offset if is_format_b else (offset + 2)
-    offsets = []
+# Decode all strips
+full_pixels = [[0 for _ in range(width)] for _ in range(height)]
 
-    # Read offset table (max 40 strips)
-    for i in range(40):
-        offset_pos = table_start + i * 2
-        if offset_pos + 1 >= len(data):
-            print(f"[{i}] offsetPos {offset_pos} >= length")
-            break
+for strip_idx in range(min(num_strips, width // 8)):
+    strip_offset = strip_offsets[strip_idx]
+    next_offset = strip_offsets[strip_idx + 1] if strip_idx < num_strips - 1 else len(decrypted)
+    strip_data = decrypted[strip_offset:next_offset]
 
-        strip_offset = data[offset_pos] | (data[offset_pos + 1] << 8)
+    strip_pixels = drawStripEGA(strip_data, height)
 
-        # Validate offset
-        if strip_offset == 0:
-            if i > 0:
-                break
-            continue
+    if strip_pixels:
+        strip_x = strip_idx * 8
+        for y in range(height):
+            for x in range(8):
+                pixel_x = strip_x + x
+                if pixel_x < width and y < len(strip_pixels):
+                    full_pixels[y][pixel_x] = strip_pixels[y][x]
 
-        # Format B: stripOffset는 상대 주소 (그대로 사용)
-        # Format A: stripOffset는 절대 주소 (그대로 사용)
-        real_offset = strip_offset
+# Count non-zero pixels
+non_zero = sum(1 for y in range(height) for x in range(width) if full_pixels[y][x] != 0)
+pct = non_zero * 100 / (width * height)
+print(f"  Non-zero: {non_zero}/{width * height} ({pct:.2f}%)")
 
-        # Format B는 상대 주소이므로 table_start 체크 불필요
-        min_offset = 0 if is_format_b else table_start
-        if real_offset >= len(data) or real_offset < min_offset:
-            print(f"[{i}] Invalid realOffset {real_offset}")
-            break
+# Save PNG
+img = Image.new('RGB', (width, height))
+for y in range(height):
+    for x in range(width):
+        color_idx = full_pixels[y][x]
+        rgb = EGA_PALETTE[color_idx]
+        img.putpixel((x, y), rgb)
 
-        # Check monotonic increase
-        if len(offsets) > 0 and real_offset <= offsets[-1]:
-            print(f"[{i}] Not monotonic: {real_offset} <= {offsets[-1]}")
-            break
+img.save('room_01_correct.png')
+print(f"  ✅ Saved: room_01_correct.png")
 
-        offsets.append(real_offset)
-
-    num_strips = len(offsets)
-    width = num_strips * 8
-
-    print(f"✅ 디코딩: {num_strips}개 스트립, {width}x{height}")
-    print(f"첫 3개 오프셋: {', '.join([f'0x{o:x}' for o in offsets[:3]])}")
-
-    if num_strips == 0:
-        return None, None, None
-
-    # Decode each strip
-    pixels = [[0 for _ in range(width)] for _ in range(height)]
-
-    for strip in range(num_strips):
-        strip_offset = offsets[strip]
-        next_offset = offsets[strip + 1] if strip < num_strips - 1 else len(data)
-
-        if strip_offset >= len(data):
-            continue
-
-        strip_data = data[strip_offset:next_offset]
-        strip_pixels = decode_strip_v3(strip_data, height)
-
-        # Copy strip to main buffer
-        strip_x = strip * 8
-        for row in range(height):
-            for col in range(8):
-                pixel_x = strip_x + col
-                if pixel_x < width:
-                    pixels[row][pixel_x] = strip_pixels[row][col]
-
-    return pixels, width, height
-
-def save_png(pixels, width, height, output_path):
-    """PNG로 저장"""
-    img = Image.new('RGB', (width, height))
-
-    for y in range(height):
-        for x in range(width):
-            color_idx = pixels[y][x]
-            rgb = EGA_PALETTE[color_idx]
-            img.putpixel((x, y), rgb)
-
-    img.save(output_path)
-    print(f"✅ 저장: {output_path}")
-
-# Main
-url = 'http://localhost:3000/room/01/image'
-print(f"📂 {url} 로드 중...\n")
-
-try:
-    with urllib.request.urlopen(url) as response:
-        data = response.read()
-
-    print(f"✅ 로드 완료: {len(data):,} bytes\n")
-
-    # Decode
-    pixels, width, height = decode_object_image(data)
-
-    if pixels:
-        # Save PNG
-        output_file = 'room_01_correct.png'
-        save_png(pixels, width, height, output_file)
-
-        print(f"\n🎮 이미지: {width}x{height}")
-        print(f"📁 출력: {output_file}")
-    else:
-        print("❌ 디코딩 실패")
-
-except Exception as e:
-    print(f"❌ 오류: {e}")
+# 4x upscale
+upscaled = img.resize((width * 4, height * 4), Image.NEAREST)
+upscaled.save('room_01_correct_4x.png')
+print(f"  ✅ Saved: room_01_correct_4x.png")

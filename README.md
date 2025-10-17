@@ -99,11 +99,141 @@ disassembled/             # 4단계: 디스어셈블된 스크립트
 
 ## 🛠️ 주요 스크립트
 
-1. **extract_resources.py** - LFL 파일 리소스 추출
-2. **decode_all_resources_fixed.py** - 배경 이미지 재구성
-3. **decode_to_real_files.py** - PNG/WAV 변환
-4. **disassemble_scripts.py** - 스크립트 디스어셈블
-5. **analyze_resources.py** - 리소스 포맷 분석
+### 1. extract_resources.py
+**목적**: LFL 파일에서 리소스 추출 및 분류
+
+**기능**:
+- XOR 0xFF 암호화 해제
+- 엔트로피 기반 리소스 타입 자동 분류
+  - graphics (엔트로피 > 0.7, 크기 > 1KB)
+  - sounds (엔트로피 > 0.6, 크기 < 2KB)
+  - scripts (엔트로피 < 0.3)
+  - palettes (크기 16-48 바이트)
+
+**입력**: 현재 디렉토리의 `*.LFL` 파일
+
+**출력**:
+- `out/` 디렉토리 (타입별 분류된 리소스)
+- `out/_summary.json` (리소스 메타데이터)
+
+**사용법**:
+```bash
+python3 extract_resources.py
+# 대화형 프롬프트: 기존 out/ 디렉토리 삭제 여부 선택
+```
+
+---
+
+### 2. decode_all_resources_fixed.py
+**목적**: 배경 이미지 재구성 및 리소스 디코딩
+
+**기능**:
+- SMAP 기반 배경 이미지 재구성
+  - Width/Height 헤더 + Strip offset table + Strip data
+  - ScummVM 호환 포맷으로 변환
+- 나머지 리소스는 out/에서 복사
+
+**입력**:
+- `*.LFL` 파일
+- `out/_summary.json` (extract_resources.py 실행 필요)
+
+**출력**:
+- `decoded2/` 디렉토리 (Room별 분류)
+- `decoded2/resources.json` (전체 리소스 맵)
+
+**사용법**:
+```bash
+python3 decode_all_resources_fixed.py
+# 출력: 73개 배경 이미지 재구성
+```
+
+---
+
+### 3. decode_to_real_files.py
+**목적**: 실제 파일 포맷으로 변환 (PNG/WAV)
+
+**기능**:
+- 배경 이미지 → PNG (EGA 16색 팔레트)
+- 사운드 → WAV (⚠️ MIDI 데이터, 재생 불가)
+- 스크립트 → TXT (Hex dump, ⚠️ 완전한 디스어셈블 아님)
+
+**요구사항**:
+- `pip3 install Pillow` (PNG 생성용)
+
+**입력**: `decoded2/resources.json`
+
+**출력**:
+- `converted2/room_XX/background.png` (🖼️ 73개)
+- `converted2/room_XX/sounds/*.wav` (⚠️ 재생 불가)
+
+**사용법**:
+```bash
+python3 decode_to_real_files.py
+```
+
+**한계**:
+- 사운드: MIDI 기반 데이터, WAV 생성되지만 재생 안됨
+- 스크립트: Hex dump만 표시, 완전한 디스어셈블 아님
+
+---
+
+### 4. disassemble_scripts.py
+**목적**: SCUMM v3 스크립트를 읽을 수 있는 어셈블리로 변환
+
+**기능**:
+- ScummVM descumm 도구 사용
+- SCUMM v3 바이트코드 → 읽을 수 있는 어셈블리
+
+**요구사항**:
+```bash
+# descumm 도구 빌드 필요
+cd /tmp
+git clone --depth 1 https://github.com/scummvm/scummvm-tools.git
+cd scummvm-tools
+./configure
+make descumm
+```
+
+**입력**: `decoded2/resources.json`
+
+**출력**:
+- `disassembled/room_XX/*.txt` (17개 성공, 81%)
+
+**사용법**:
+```bash
+python3 disassemble_scripts.py
+```
+
+**결과 예시**:
+```
+[0000] (0F) if (getState(1) == 0) {
+[0006] (00)   stopObjectCode();
+[0007] (80)   breakHere();
+```
+
+---
+
+### 5. analyze_resources.py
+**목적**: 리소스 포맷 분석 및 식별
+
+**기능**:
+- 사운드 포맷 식별 (PC Speaker, AdLib, Roland)
+- 스크립트 opcode 빈도 분석
+- 권장 사항 제공
+
+**입력**: `decoded2/resources.json`
+
+**출력**: 콘솔 리포트 (파일 생성 없음)
+
+**사용법**:
+```bash
+python3 analyze_resources.py
+```
+
+**분석 내용**:
+- 사운드: 포맷별 개수 및 예시
+- 스크립트: opcode 통계
+- 권장: ScummVM 사용, descumm 도구
 
 ## 📚 문서
 

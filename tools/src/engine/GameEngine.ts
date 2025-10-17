@@ -153,12 +153,14 @@ export class GameEngine {
    */
   private async loadGraphics(resource: ResourceMetadata, x: number, y: number): Promise<void> {
     try {
-      const response = await fetch(`${this.resourceBasePath}/${resource.path}`);
+      // 서버의 /room/{roomNum}/image API 사용 (재구성된 포맷)
+      const roomNum = this.currentRoom.toString().padStart(2, '0');
+      const response = await fetch(`/room/${roomNum}/image`);
       const buffer = await response.arrayBuffer();
       const data = new Uint8Array(buffer);
 
       await this.renderer.renderBitmap(data, x, y);
-      console.log(`🖼️  그래픽 렌더링: ${resource.filename} at (${x}, ${y})`);
+      console.log(`🖼️  그래픽 렌더링: Room ${roomNum} (${resource.filename}) at (${x}, ${y})`);
     } catch (error) {
       console.error('그래픽 로드 실패:', error);
     }

@@ -1,85 +1,87 @@
 #!/usr/bin/env python3
 """
-LFL 파일 구조 정확히 분석
+LFL 파일 구조 분석 - SMAP chunk 찾기
 """
-from pathlib import Path
+import struct
 
-def analyze_lfl(filename):
-    """LFL 파일의 실제 구조 분석"""
-    # Read and decrypt
-    data = Path(filename).read_bytes()
-    decrypted = bytes([b ^ 0xFF for b in data])
+# XOR decrypt
+with open('01.LFL', 'rb') as f:
+    encrypted = f.read()
+decrypted = bytes([b ^ 0xFF for b in encrypted])
 
-    print(f"=== {filename} 구조 분석 ===\n")
-    print(f"파일 크기: {len(decrypted):,} bytes\n")
+print("🔍 LFL 파일 구조 분석\n" + "="*60)
+print(f"파일 크기: {len(decrypted)} bytes\n")
 
-    # 첫 32 바이트 헥스 덤프
-    print("첫 32 바이트 (헥스):")
-    for i in range(0, 32, 16):
-        hex_str = ' '.join(f'{b:02x}' for b in decrypted[i:i+16])
-        ascii_str = ''.join(chr(b) if 32 <= b < 127 else '.' for b in decrypted[i:i+16])
-        print(f"  {i:04x}: {hex_str:<48}  {ascii_str}")
+# Header
+print("📋 헤더:")
+print(f"  Bytes 0-3: {' '.join(f'{b:02X}' for b in decrypted[0:4])}")
+print(f"  Room width: {decrypted[4] | (decrypted[5] << 8)}")
+print(f"  Room height: {decrypted[6] | (decrypted[7] << 8)}")
+print(f"  Bytes 8-9: {' '.join(f'{b:02X}' for b in decrypted[8:10])}")
+print()
 
-    print()
+# Resource table at 0x0A
+print("📦 리소스 테이블 (0x0A부터):")
+resourceTableStart = 0x0A
+for i in range(10):
+    pos = resourceTableStart + i * 2
+    if pos + 1 >= len(decrypted):
+        break
+    offset = decrypted[pos] | (decrypted[pos + 1] << 8)
+    if offset == 0:
+        break
+    print(f"  리소스 {i}: offset 0x{offset:04X} ({offset})")
+print()
 
-    # 문서에 따르면:
-    # 0x00-0x01: Width
-    # 0x02-0x03: Height
-    # 0x04+: Resource offset table
+# Chunk 찾기
+print("🔖 Chunk 분석:")
+pos = 0
+chunk_count = 0
+while pos < min(len(decrypted), 2000):
+    if pos + 8 > len(decrypted):
+        break
 
-    width_doc = decrypted[0x00] | (decrypted[0x01] << 8)
-    height_doc = decrypted[0x02] | (decrypted[0x03] << 8)
+    # 4-byte tag 읽기 (big-endian ASCII)
+    tag_bytes = decrypted[pos:pos+4]
 
-    print("문서 기반 파싱 (0x00부터):")
-    print(f"  Width:  0x{width_doc:04x} ({width_doc})")
-    print(f"  Height: 0x{height_doc:04x} ({height_doc})")
-    print()
+    # ASCII 문자인지 확인
+    try:
+        tag = tag_bytes.decode('ascii')
+        if all(32 <= b < 127 for b in tag_bytes):
+            # Size 읽기 (little-endian)
+            size = struct.unpack('<I', decrypted[pos+4:pos+8])[0]
 
-    # 서버 코드가 읽는 위치
-    width_server = decrypted[0x04] | (decrypted[0x05] << 8)
-    height_server = decrypted[0x06] | (decrypted[0x07] << 8)
+            # 합리적인 크기인지 확인
+            if 0 < size < len(decrypted):
+                print(f"  Chunk at 0x{pos:04X}: '{tag}' size={size} (0x{size:04X})")
 
-    print("서버 코드 파싱 (0x04부터):")
-    print(f"  Width:  0x{width_server:04x} ({width_server})")
-    print(f"  Height: 0x{height_server:04x} ({height_server})")
-    print()
+                # SMAP이면 상세 분석
+                if tag == 'SMAP':
+                    print(f"    ✅ SMAP 발견!")
+                    smap_start = pos + 8
+                    print(f"    SMAP 데이터 시작: 0x{smap_start:04X}")
 
-    # Resource offset table 읽기 (문서 기반)
-    print("Resource offset table (문서 기반, 0x04부터):")
-    for i in range(10):
-        pos = 0x04 + i * 2
-        if pos + 1 >= len(decrypted):
-            break
-        offset = decrypted[pos] | (decrypted[pos + 1] << 8)
-        print(f"  [{i:2d}] @0x{pos:04x}: 0x{offset:04x} ({offset:5d})")
+                    # 첫 10개 strip offset 읽기 (16-color: offset + 2부터)
+                    print(f"    첫 10개 strip offset:")
+                    for i in range(10):
+                        offset_pos = smap_start + 2 + i * 2
+                        if offset_pos + 1 < len(decrypted):
+                            strip_offset = decrypted[offset_pos] | (decrypted[offset_pos + 1] << 8)
+                            # SMAP 내부 상대 offset
+                            abs_offset = smap_start + strip_offset
+                            print(f"      Strip {i}: 0x{strip_offset:04X} (절대 0x{abs_offset:04X})")
 
-    print()
+                chunk_count += 1
+                if chunk_count > 20:
+                    break
 
-    # Resource offset table 읽기 (서버 코드 기반)
-    print("Resource offset table (서버 코드, 0x0A부터):")
-    for i in range(10):
-        pos = 0x0A + i * 2
-        if pos + 1 >= len(decrypted):
-            break
-        offset = decrypted[pos] | (decrypted[pos + 1] << 8)
-        print(f"  [{i:2d}] @0x{pos:04x}: 0x{offset:04x} ({offset:5d})")
+                # 다음 chunk로
+                pos += 8 + size
+                continue
+    except:
+        pass
 
-    print()
+    pos += 1
 
-    # 각 오프셋 위치의 데이터 미리보기
-    print("각 리소스 오프셋 위치의 데이터:")
-    for i in range(5):
-        pos = 0x04 + i * 2
-        if pos + 1 >= len(decrypted):
-            break
-        offset = decrypted[pos] | (decrypted[pos + 1] << 8)
-        if offset < len(decrypted):
-            preview = ' '.join(f'{b:02x}' for b in decrypted[offset:offset+16])
-            print(f"  Offset 0x{offset:04x}: {preview}")
-
-# Analyze room files
-for room_num in [1, 2, 3]:
-    filename = f'{room_num:02d}.LFL'
-    if Path(filename).exists():
-        analyze_lfl(filename)
-        print("\n" + "="*60 + "\n")
+print()
+print("="*60)

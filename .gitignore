@@ -3,6 +3,10 @@
 # Build outputs
 /out
 /output
+/decoded
+/decoded2
+/converted
+/converted2
 
 # Node modules
 **/node_modules

@@ -1,0 +1,15 @@
+{
+  "name": "loom-scumm-engine",
+  "version": "0.1.0",
+  "description": "SCUMM v3 게임 엔진 (LOOM) - Bun.sh + TypeScript",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch src/main.ts",
+    "build": "bun build src/main.ts --outdir ./dist --target browser",
+    "serve": "bun run server.ts"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "bun-types": "latest"
+  }
+}

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LOOM - SCUMM v3 Engine</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Courier New', monospace;
+      background: #000;
+      color: #0f0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #0f0;
+      text-shadow: 0 0 10px #0f0;
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #0a0;
+      font-size: 0.9em;
+    }
+
+    #gameContainer {
+      background: #111;
+      border: 2px solid #0f0;
+      padding: 10px;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+      margin-bottom: 20px;
+    }
+
+    #gameCanvas {
+      display: block;
+      background: #000;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    #controls {
+      background: #111;
+      border: 2px solid #0f0;
+      padding: 20px;
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 640px;
+    }
+
+    .control-group {
+      margin-bottom: 15px;
+    }
+
+    .control-group label {
+      display: inline-block;
+      width: 120px;
+      color: #0f0;
+    }
+
+    button {
+      background: #000;
+      color: #0f0;
+      border: 2px solid #0f0;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-size: 1em;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      transition: all 0.2s;
+    }
+
+    button:hover {
+      background: #0f0;
+      color: #000;
+      box-shadow: 0 0 10px #0f0;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    select {
+      background: #000;
+      color: #0f0;
+      border: 2px solid #0f0;
+      padding: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 1em;
+    }
+
+    #status {
+      background: #111;
+      border: 2px solid #0f0;
+      padding: 15px;
+      width: 100%;
+      max-width: 640px;
+      color: #0f0;
+      font-family: 'Courier New', monospace;
+    }
+
+    #info {
+      background: #111;
+      border: 2px solid #0a0;
+      padding: 15px;
+      margin-top: 20px;
+      width: 100%;
+      max-width: 640px;
+      color: #0a0;
+      font-size: 0.85em;
+    }
+
+    #info h3 {
+      color: #0f0;
+      margin-bottom: 10px;
+    }
+
+    #info ul {
+      list-style: none;
+      padding-left: 20px;
+    }
+
+    #info li:before {
+      content: '> ';
+      color: #0f0;
+    }
+
+    .blink {
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    code {
+      background: #000;
+      padding: 2px 6px;
+      border: 1px solid #0a0;
+      color: #0ff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🎮 LOOM - SCUMM v3 Engine</h1>
+    <p class="subtitle">Bun.sh + TypeScript Implementation</p>
+  </header>
+
+  <div id="gameContainer">
+    <canvas id="gameCanvas" width="640" height="400"></canvas>
+  </div>
+
+  <div id="controls">
+    <div class="control-group">
+      <button id="initButton" style="font-weight: bold;">🚀 게임 시작</button>
+      <button id="beepButton">🔊 비프음 테스트</button>
+    </div>
+
+    <div class="control-group">
+      <label for="roomSelect">룸 선택:</label>
+      <select id="roomSelect">
+        <option value="1">Room 01</option>
+        <option value="2">Room 02</option>
+        <option value="3">Room 03</option>
+        <option value="4">Room 04</option>
+        <option value="5">Room 05</option>
+        <option value="10">Room 10</option>
+        <option value="20">Room 20</option>
+        <option value="30">Room 30</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="status">
+    <span class="blink">▋</span> 게임을 시작하려면 "게임 시작" 버튼을 클릭하세요.
+  </div>
+
+  <div id="info">
+    <h3>📖 사용 방법</h3>
+    <ul>
+      <li>게임 시작 버튼을 클릭하여 LOOM 게임 데이터를 로드합니다.</li>
+      <li>룸 선택 드롭다운으로 다른 룸을 탐험할 수 있습니다.</li>
+      <li>브라우저 콘솔을 열어 <code>gameEngine</code> 객체로 직접 제어할 수 있습니다.</li>
+      <li>콘솔 명령어: <code>gameEngine.loadRoom(5)</code>, <code>gameEngine.playBeep()</code></li>
+    </ul>
+
+    <h3 style="margin-top: 15px;">🔧 기술 스택</h3>
+    <ul>
+      <li>Bun.sh - JavaScript 런타임</li>
+      <li>TypeScript - 타입 안전성</li>
+      <li>Canvas API - 그래픽 렌더링</li>
+      <li>Web Audio API - 사운드 재생</li>
+    </ul>
+
+    <h3 style="margin-top: 15px;">⚙️ 구현 상태</h3>
+    <ul>
+      <li>✅ LFL 파일 파싱 및 리소스 추출</li>
+      <li>✅ EGA 팔레트 관리</li>
+      <li>✅ 그래픽 렌더링 (기본)</li>
+      <li>✅ 사운드 재생 (PC 스피커 에뮬레이션)</li>
+      <li>⚠️ SCUMM 스크립트 인터프리터 (부분)</li>
+      <li>❌ 입력 처리 (예정)</li>
+      <li>❌ 전체 게임 로직 (예정)</li>
+    </ul>
+  </div>
+
+  <script type="module" src="./dist/main.js"></script>
+</body>
+</html>

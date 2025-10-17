@@ -1,272 +1,276 @@
-# LOOM LFL 파일 분석 도구
+# LOOM SCUMM v3 브라우저 뷰어
 
-SCUMM v3 (LOOM) LFL 파일을 분석하고 정보를 추출하는 Python 도구입니다.
+LOOM (1990) 게임의 SCUMM v3 엔진 데이터를 브라우저에서 볼 수 있는 도구입니다.
 
-## 파일 목록
+## 📋 프로젝트 구조
 
-- **scummvm.md** - LFL 파일 포맷 상세 문서
-- **lfl_analyzer.py** - Python 분석 도구
-- **\*.LFL** - LOOM 게임 리소스 파일
+```
+LOOM/
+├── *.LFL           # LOOM 게임 데이터 파일 (LucasFilm Library)
+├── LOOM.EXE        # 원본 실행 파일
+├── tools/          # 브라우저 뷰어
+│   ├── src/
+│   │   ├── engine/
+│   │   │   ├── ScummV3Decoder.ts    # SCUMM v3 EGA 그래픽 디코더
+│   │   │   ├── GameEngine.ts        # 게임 엔진 코어
+│   │   │   ├── GraphicsRenderer.ts  # 그래픽 렌더러
+│   │   │   ├── PaletteManager.ts    # EGA 팔레트 관리
+│   │   │   ├── ScriptInterpreter.ts # 스크립트 인터프리터
+│   │   │   └── SoundPlayer.ts       # 사운드 플레이어
+│   │   ├── types/
+│   │   │   └── resources.ts         # 타입 정의
+│   │   └── main.ts                  # 메인 진입점
+│   ├── index.html   # 브라우저 UI
+│   ├── server.ts    # 개발 서버
+│   └── package.json # 의존성 설정
+├── out/            # 추출된 리소스 파일 (자동 생성)
+└── README.md       # 이 파일
+```
 
-## 빠른 시작
+## 🚀 시작하기
 
-### 1. 단일 파일 분석
+### 1. 필수 요구사항
+
+- **Python 3**: 리소스 추출용
+  ```bash
+  python3 --version  # 3.6 이상
+  ```
+
+- **Bun**: JavaScript 런타임 및 빌드 도구
+  ```bash
+  curl -fsSL https://bun.sh/install | bash
+  ```
+
+- **LOOM 게임 파일**: `*.LFL` 파일들과 `LOOM.EXE`가 프로젝트 루트에 있어야 합니다
+  - 00.LFL ~ 99.LFL (일부 번호는 없을 수 있음)
+  - LOOM.EXE
+
+### 2. 리소스 추출
+
+LFL 파일에서 게임 리소스를 추출합니다:
 
 ```bash
-python3 lfl_analyzer.py 01.LFL
+python3 extract_resources.py
 ```
 
-**출력 예시**:
+이 스크립트는:
+- *.LFL 파일을 XOR 복호화 (0xFF)
+- 각 리소스 블록 추출
+- 엔트로피 기반 타입 분류 (graphics, sounds, scripts, palettes, unknown)
+- `out/` 디렉토리에 타입별로 정리
+- `out/_summary.json` 생성 (메타데이터)
+
+출력 구조:
 ```
-======================================================================
-📄 파일: 01.LFL
-======================================================================
-
-📊 기본 정보
-   타입: room
-   크기: 55,213 bytes
-   룸 크기: 19866x48128 pixels
-   설명: 룸 리소스 파일
-
-📍 리소스 오프셋 테이블
-   발견된 오프셋: 20개
-   # 1: 위치 0x0004 → 오프셋 0x0140 (   320 bytes)
-   # 2: 위치 0x0006 → 오프셋 0x0090 (   144 bytes)
-   ...
+out/
+├── _summary.json
+├── graphics/
+│   ├── 01_res001.bin
+│   ├── 01_res002.bin
+│   └── ...
+├── sounds/
+├── scripts/
+├── palettes/
+└── unknown/
 ```
 
-### 2. 전체 디렉토리 분석
+### 3. 의존성 설치
 
 ```bash
-python3 lfl_analyzer.py --all .
+cd tools
+bun install
 ```
 
-**출력 예시**:
-```
-🔍 총 75개 LFL 파일 발견
+### 3. 빌드
 
-======================================================================
-📊 전체 통계
-======================================================================
-   총 파일 수: 75개
-   총 크기: 1,984,680 bytes (1.89 MB)
-   평균 크기: 26,462 bytes
-   룸 파일: 74개
-```
-
-### 3. 복호화된 파일 저장
+TypeScript 코드를 브라우저용 JavaScript로 컴파일합니다:
 
 ```bash
-python3 lfl_analyzer.py 01.LFL --export-decrypted
+bun run build
 ```
 
-생성되는 파일: `01.decrypted` (0xFF XOR 복호화된 원본 데이터)
+이 명령은:
+- `src/` 폴더의 TypeScript 코드를 컴파일
+- `dist/main.js` 파일 생성 (브라우저에서 실행 가능)
 
-### 4. 헤더 정보 저장
+### 4. 개발 서버 실행
 
 ```bash
-python3 lfl_analyzer.py 01.LFL --export-header
+bun run serve
 ```
 
-생성되는 파일: `01.info.txt` (헤더 및 오프셋 정보)
+서버가 시작되면:
+```
+🚀 서버 시작: http://localhost:3000
+📁 게임 데이터: ../out/
+🎮 브라우저에서 http://localhost:3000 을 열어주세요!
+```
 
-### 5. 모든 정보 추출
+### 5. 브라우저에서 보기
+
+1. 브라우저에서 http://localhost:3000 열기
+2. 콘솔 로그에서 디코딩 과정 확인 가능 (F12 → Console)
+3. 좌우 화살표 키로 룸(Room) 전환
+
+## 🎮 사용법
+
+### 키보드 단축키
+
+- **← (왼쪽 화살표)**: 이전 룸
+- **→ (오른쪽 화살표)**: 다음 룸
+- **1-9**: 특정 룸으로 이동
+
+### 콘솔 명령
+
+브라우저 개발자 도구 콘솔(F12)에서 사용 가능:
+
+```javascript
+// 특정 룸 로드
+gameEngine.loadRoom(5)
+
+// 현재 룸 정보
+gameEngine.currentRoom
+
+// 리소스 정보
+gameEngine.resourceIndex
+```
+
+## 🔧 개발
+
+### 코드 수정 후 재빌드
+
+1. TypeScript 코드 수정
+2. 재빌드:
+   ```bash
+   bun run build
+   ```
+3. 브라우저에서 **Cmd+Shift+R** (Mac) 또는 **Ctrl+F5** (Windows)로 하드 리프레시
+
+### 빠른 개발 사이클
 
 ```bash
-python3 lfl_analyzer.py 01.LFL --export-decrypted --export-header --output ./output
+# 파일 변경 감지 + 자동 재빌드 (watch 모드는 직접 설정 필요)
+bun run build && bun run serve
 ```
 
-## 사용법
+## 📊 기술 상세
 
-```
-usage: lfl_analyzer.py [-h] [--all DIR] [--export-decrypted]
-                       [--export-header] [--output DIR] [file]
+### SCUMM v3 EGA 그래픽 포맷
 
-SCUMM LFL 파일 분석 도구 (LOOM)
+SCUMM v3는 8픽셀 너비의 세로 스트립(strip) 단위로 그래픽을 저장합니다:
 
-positional arguments:
-  file                  분석할 LFL 파일
+#### 3-Mode RLE 압축 (ScummVM drawStripEGA)
 
-optional arguments:
-  -h, --help            도움말 표시
-  --all DIR             디렉토리 내 모든 LFL 파일 분석
-  --export-decrypted    복호화된 데이터를 파일로 저장
-  --export-header       헤더 정보를 텍스트 파일로 저장
-  --output DIR, -o DIR  출력 디렉토리 (기본: 현재 디렉토리)
-```
+1. **Mode 1 (0x00-0x7F)**: 단색 런
+   - 상위 4비트: 길이 (0이면 다음 바이트에서 읽음)
+   - 하위 4비트: 색상 (0-15, EGA 16색)
 
-## 기능
+2. **Mode 2 (0x80-0xBF)**: 이전 픽셀 반복
+   - 하위 6비트: 길이 (0이면 다음 바이트에서 읽음)
+   - 왼쪽 열의 같은 y 좌표 픽셀 복사
 
-### 분석 기능
+3. **Mode 3 (0xC0-0xFF)**: 2색 디더링
+   - 하위 6비트: 길이 (0이면 다음 바이트에서 읽음)
+   - 다음 바이트: 2개 색상 (상위/하위 4비트)
+   - 홀수 픽셀은 상위, 짝수 픽셀은 하위 색상
 
-- ✅ 0xFF XOR 복호화
-- ✅ 룸 헤더 파싱 (너비, 높이)
-- ✅ 리소스 오프셋 테이블 추출
-- ✅ 데이터 섹션 자동 탐지
-- ✅ 엔트로피 기반 데이터 타입 추정
-- ✅ 00.LFL 인덱스 파일 분석
+#### 스트립 디코딩 과정
 
-### 추출 기능
-
-- ✅ 복호화된 데이터 저장
-- ✅ 헤더 및 오프셋 정보 저장
-- ✅ 디렉토리 일괄 처리
-
-### 데이터 타입 추정
-
-| 엔트로피 | 추정 타입 |
-|---------|----------|
-| < 10% | 패딩/단순 데이터 |
-| 10-30% | 스크립트/코드 |
-| 30-60% | 압축 데이터 |
-| > 60% | 그래픽/사운드 |
-
-## 출력 형식
-
-### 기본 정보
-- 파일 타입 (index/room)
-- 파일 크기
-- 룸 크기 (width × height)
-
-### 리소스 오프셋 테이블
-- 오프셋 위치
-- 리소스 시작 주소
-- 리소스 크기
-
-### 데이터 섹션
-- 섹션 범위 (시작-끝)
-- 섹션 크기
-- 헥스 미리보기
-- 추정 데이터 타입
-
-### 엔트로피 분석
-- 파일을 4개 섹션으로 나누어 분석
-- 각 섹션의 엔트로피 퍼센트
-- 데이터 타입 추정
-
-## 예제
-
-### 예제 1: 특정 룸 분석
-
-```bash
-python3 lfl_analyzer.py 10.LFL
-```
-
-### 예제 2: 모든 파일 분석 및 통계
-
-```bash
-python3 lfl_analyzer.py --all . > analysis_report.txt
-```
-
-### 예제 3: 여러 파일 배치 처리
-
-```bash
-for file in 01.LFL 02.LFL 03.LFL; do
-    python3 lfl_analyzer.py "$file" --export-decrypted --output ./decrypted
-done
-```
-
-### 예제 4: 인덱스 파일 분석
-
-```bash
-python3 lfl_analyzer.py 00.LFL
-```
-
-## Python 코드 예제
-
-### 기본 사용
-
-```python
-from lfl_analyzer import LFLAnalyzer
-
-# 파일 분석
-analyzer = LFLAnalyzer('01.LFL')
-analyzer.analyze()
-analyzer.print_report()
-
-# 헤더 정보 접근
-print(f"룸 크기: {analyzer.header['width']}x{analyzer.header['height']}")
-
-# 오프셋 접근
-for pos, offset in analyzer.offsets:
-    print(f"리소스 오프셋: 0x{offset:04x}")
-```
-
-### 직접 복호화
-
-```python
-# 파일 읽기
-with open('01.LFL', 'rb') as f:
-    encrypted = f.read()
-
-# 0xFF XOR 복호화
-decrypted = bytes([b ^ 0xFF for b in encrypted])
-
-# 헤더 파싱
-import struct
-width = struct.unpack('<H', decrypted[0:2])[0]
-height = struct.unpack('<H', decrypted[2:4])[0]
-
-print(f"룸 크기: {width}x{height}")
-```
-
-## 기술 정보
+1. 8픽셀 × 높이 버퍼 생성
+2. y=0, x=0부터 시작
+3. RLE 코드 읽어서 픽셀 채우기
+4. y가 높이 도달하면 y=0, x++ (다음 열로)
+5. x가 8 도달하면 스트립 완료
 
 ### LFL 파일 구조
 
 ```
-00.LFL (인덱스)
-├─ 매직 헤더: FF FE 17 FC
-└─ 리소스 비트맵 테이블
-
-XX.LFL (룸 파일)
-├─ [암호화: 0xFF XOR]
-├─ 헤더
-│  ├─ 룸 너비 (16비트)
-│  ├─ 룸 높이 (16비트)
-│  └─ 오프셋 테이블 (16비트 배열)
-└─ 리소스 데이터
-   ├─ 그래픽 (EGA 비트맵)
-   ├─ 스크립트 (SCUMM 바이트코드)
-   ├─ 사운드
-   ├─ 애니메이션
-   └─ 팔레트
+LFL File (LucasFilm Library)
+├── Index Section (0x00 ~ ...)
+│   └── Room offset table
+├── Room 1
+│   ├── Header (크기, 높이, 너비 등)
+│   ├── Image Data (오프셋 테이블 + 압축된 스트립 데이터)
+│   ├── Object Data
+│   ├── Script Data
+│   └── Sound Data
+├── Room 2
+├── ...
 ```
 
-### SCUMM v3 특징
+#### 암호화
 
-- 청크 태그 없음 (old-style)
-- 16비트 주소 체계
-- 리틀 엔디안 바이트 순서
-- 0xFF XOR 암호화
-- 고정 오프셋 기반 구조
+- 모든 LFL 파일은 **XOR 0xFF**로 암호화
+- 서버가 파일 읽을 때 자동으로 복호화
 
-## 문서
+### 높이 추정 알고리즘
 
-상세한 파일 포맷 정보는 **scummvm.md** 문서를 참고하세요.
+파일 크기와 스트립 개수로 높이 추정:
 
-## 요구사항
+```typescript
+bytesPerStrip = fileSize / numStrips
 
-- Python 3.6 이상
-- 표준 라이브러리만 사용 (외부 의존성 없음)
+if bytesPerStrip < 100  → height = 64
+if bytesPerStrip < 200  → height = 88
+if bytesPerStrip < 400  → height = 128
+if bytesPerStrip < 800  → height = 144  (LOOM 대부분 룸)
+else                    → height = 200
+```
 
-## 라이센스
+## 🐛 트러블슈팅
 
-분석 도구는 교육 및 연구 목적으로 자유롭게 사용할 수 있습니다.
+### 그래픽이 세로 줄무늬로 나타남
 
-## 참고
+- **원인**: 오프셋 테이블 파싱 실패
+- **해결**: 콘솔 로그 확인 → 어느 단계에서 break되는지 확인
+- **디버그**: `ScummV3Decoder.ts`의 오프셋 파싱 로그 참고
 
-- LOOM 게임은 LucasArts의 저작물입니다
-- ScummVM: https://www.scummvm.org/
-- SCUMM 위키: https://wiki.scummvm.org/
+### 빌드 후에도 변경사항이 반영 안 됨
 
-## 개발 정보
+1. 브라우저 캐시 문제:
+   ```
+   Cmd+Shift+R (Mac) 또는 Ctrl+F5 (Windows)
+   ```
 
-- **작성일**: 2025년
-- **분석 대상**: LOOM (DOS EGA 버전)
-- **SCUMM 버전**: v3
-- **도구**: Python 3
+2. 서버 재시작:
+   ```bash
+   # 기존 서버 종료 (Ctrl+C)
+   bun run serve
+   ```
 
----
+3. dist/ 폴더 완전 삭제 후 재빌드:
+   ```bash
+   rm -rf dist && bun run build
+   ```
 
-**분석 완료!** LOOM의 비밀을 탐험하세요! 🎮✨
+### 서버가 시작 안 됨 (포트 이미 사용 중)
+
+```bash
+# 포트 3000 사용 중인 프로세스 찾기
+lsof -ti:3000
+
+# 종료
+kill $(lsof -ti:3000)
+
+# 또는 다른 포트 사용 (server.ts 수정)
+```
+
+## 📚 참고 자료
+
+- [ScummVM Source Code](https://github.com/scummvm/scummvm) - SCUMM 엔진 레퍼런스 구현
+- [SCUMM v3 Formats](./SCUMM_V3_FORMATS.md) - 상세 포맷 문서
+- [ScummVM Wiki](./scummvm.md) - ScummVM 관련 정보
+
+## 📝 라이선스
+
+이 프로젝트는 LOOM 게임 데이터를 분석하고 표시하기 위한 교육 목적 도구입니다.
+LOOM 게임의 저작권은 LucasArts/Disney에 있습니다.
+
+## 🔄 업데이트 히스토리
+
+### 2025-10-17
+- ✅ ScummVM의 정확한 `drawStripEGA` 알고리즘 구현
+- ✅ 3-mode RLE 압축 지원 (단색/반복/디더링)
+- ✅ 오프셋 계산 버그 수정
+- ✅ 높이 추정 개선 (144px 지원)
+- ✅ 디버그 로깅 강화

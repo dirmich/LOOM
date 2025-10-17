@@ -5,7 +5,13 @@
 
 export class ScummV3Decoder {
   /**
-   * SCUMM v3 Object Image 디코딩 (ScummVM 방식)
+   * SCUMM v3 Room Image 디코딩 (서버가 재구성한 포맷)
+   *
+   * 서버 재구성 포맷:
+   * [0x00-0x01]: width (little-endian)
+   * [0x02-0x03]: height (little-endian)
+   * [0x04-...]:  strip offset table (상대 주소, offset 4 기준)
+   * [...]:       strip 데이터 (RLE 압축)
    */
   static decodeObjectImage(data: Uint8Array): { width: number; height: number; pixels: Uint8Array } | null {
     if (data.length < 8) {
@@ -14,50 +20,25 @@ export class ScummV3Decoder {
     }
 
     try {
-      // Skip 0x00 padding
-      let offset = 0;
-      while (offset < data.length && data[offset] === 0x00) {
-        offset++;
+      // Read width & height from header
+      const width = data[0] | (data[1] << 8);
+      const height = data[2] | (data[3] << 8);
+
+      console.log(`  📐 Room size: ${width}×${height}`);
+
+      // Validate dimensions
+      if (width <= 0 || height <= 0 || width > 2000 || height > 300) {
+        console.warn(`  ⚠️ Invalid dimensions: ${width}×${height}`);
+        return null;
       }
 
-      console.log(`  헤더 패딩: ${offset} bytes`);
-
-      if (offset + 1 >= data.length) {
-        return this.decodeFallback(data);
-      }
-
-      // Read first word
-      const firstWord = data[offset] | (data[offset + 1] << 8);
-      console.log(`  첫 번째 word: 0x${firstWord.toString(16)} (${firstWord})`);
-
-      // FORMAT DETECTION
-      // Format A: First word = file size (within 10% of actual size)
-      const fileSize = data.length - offset;
-      const isFormatA = Math.abs(firstWord - fileSize) < fileSize * 0.1;
-
-      // Format B: First word is small (<1000) - likely direct offset
-      const isFormatB = firstWord < 1000 && firstWord < fileSize;
-
-      // Format C: First word is large (>fileSize) - likely raw data
-      const isFormatC = firstWord > fileSize;
-
-      console.log(`  포맷 감지: A=${isFormatA}, B=${isFormatB}, C=${isFormatC}`);
-
-      if (isFormatC) {
-        // Raw compressed data - decode directly without offset table
-        console.log(`  ⚡ Format C: 오프셋 테이블 없음, 직접 디코딩`);
-        return this.decodeRawFormat(data.slice(offset));
-      }
-
-      // Format A or B: Parse offset table
-      // Format B (서버가 재구성한 데이터): offset table이 offset+0부터 시작
-      // Format A (원본 LFL): offset table이 offset+2부터 시작
-      const tableStart = isFormatB ? offset : (offset + 2);
+      // Strip offset table starts at offset 4
+      const tableStart = 4;
+      const maxStrips = Math.ceil(width / 8);
       const offsets: number[] = [];
-      let numStrips = 0;
 
-      // Read offset table (max 40 strips for 320px / 8)
-      for (let i = 0; i < 40; i++) {
+      // Read strip offset table
+      for (let i = 0; i < maxStrips; i++) {
         const offsetPos = tableStart + i * 2;
         if (offsetPos + 1 >= data.length) {
           console.log(`  🛑 [${i}] offsetPos ${offsetPos} >= length`);
@@ -73,57 +54,56 @@ export class ScummV3Decoder {
           continue;
         }
 
-        // Calculate real offset
-        // Format B: stripOffset는 파일 시작 기준 상대 주소 (그대로 사용)
-        // Format A: stripOffset는 원본 LFL 파일의 절대 주소 (그대로 사용)
-        const realOffset = stripOffset;
-
-        // Format B는 상대 주소이므로 tableStart 체크 불필요
-        const minOffset = isFormatB ? 0 : tableStart;
-        if (realOffset >= data.length || realOffset < minOffset) {
-          console.log(`  ❌ [${i}] Invalid realOffset ${realOffset} (stripOffset=0x${stripOffset.toString(16)})`);
+        if (stripOffset >= data.length) {
+          console.log(`  ❌ [${i}] Invalid stripOffset ${stripOffset}`);
           break;
         }
 
         // Check monotonic increase
-        if (offsets.length > 0 && realOffset <= offsets[offsets.length - 1]) {
-          console.log(`  ❌ [${i}] Not monotonic: ${realOffset} <= ${offsets[offsets.length - 1]} (stripOffset=0x${stripOffset.toString(16)})`);
+        if (offsets.length > 0 && stripOffset <= offsets[offsets.length - 1]) {
+          console.log(`  ❌ [${i}] Not monotonic: ${stripOffset} <= ${offsets[offsets.length - 1]}`);
           break;
         }
 
-        offsets.push(realOffset);
-        numStrips++;
+        offsets.push(stripOffset);
       }
+
+      const numStrips = offsets.length;
 
       if (numStrips === 0) {
-        console.warn('⚠️  오프셋 테이블 파싱 실패 → 폴백');
-        return this.decodeFallback(data);
+        console.warn('⚠️  No valid strips found');
+        return null;
       }
 
-      const width = numStrips * 8;
-      const height = this.estimateHeight(data.length, numStrips);
-
-      console.log(`  ✅ 디코딩: ${numStrips}개 스트립, ${width}x${height}`);
-      console.log(`  첫 3개 오프셋: ${offsets.slice(0, 3).map(o => '0x' + o.toString(16)).join(', ')}`);
+      console.log(`  ✅ Found ${numStrips} strips`);
+      console.log(`  📊 First 3 offsets: ${offsets.slice(0, 3).map(o => '0x' + o.toString(16)).join(', ')}`);
 
       // Decode each strip
       const pixels = new Uint8Array(width * height);
       pixels.fill(0);
 
-      for (let strip = 0; strip < numStrips; strip++) {
+      for (let strip = 0; strip < Math.min(numStrips, Math.floor(width / 8)); strip++) {
         const stripOffset = offsets[strip];
         const nextOffset = strip < numStrips - 1 ? offsets[strip + 1] : data.length;
 
         if (stripOffset >= data.length) continue;
 
         const stripData = data.slice(stripOffset, nextOffset);
-        this.decodeStripV3(stripData, pixels, strip * 8, width, height);
+        this.decodeStripEGA(stripData, pixels, strip * 8, width, height);
       }
+
+      // Count non-zero pixels
+      let nonZero = 0;
+      for (let i = 0; i < pixels.length; i++) {
+        if (pixels[i] !== 0) nonZero++;
+      }
+      const pct = ((nonZero * 100) / pixels.length).toFixed(2);
+      console.log(`  🎨 Non-zero pixels: ${nonZero}/${pixels.length} (${pct}%)`);
 
       return { width, height, pixels };
     } catch (error) {
       console.error('❌ 디코딩 실패:', error);
-      return this.decodeFallback(data);
+      return null;
     }
   }
 
@@ -262,7 +242,7 @@ export class ScummV3Decoder {
    * - 0x80-0xBF: Repeat previous pixel
    * - 0xC0-0xFF: Two-color dithering (두 색상을 교대로)
    */
-  private static decodeStripV3(
+  private static decodeStripEGA(
     data: Uint8Array,
     pixels: Uint8Array,
     stripX: number,
@@ -271,7 +251,7 @@ export class ScummV3Decoder {
   ): void {
     if (data.length === 0) return;
 
-    // 8x200 픽셀 스트립 버퍼
+    // 8×height 픽셀 스트립 버퍼
     const dst: number[][] = [];
     for (let i = 0; i < height; i++) {
       dst[i] = new Array(8).fill(0);
@@ -283,11 +263,7 @@ export class ScummV3Decoder {
     let y = 0;
     let offset = 0;
 
-    while (x < 8) {
-      if (offset >= data.length) {
-        break;
-      }
-
+    while (x < 8 && offset < data.length) {
       color = data[offset];
       offset++;
 
@@ -306,7 +282,8 @@ export class ScummV3Decoder {
           }
 
           for (let z = 0; z < run; z++) {
-            if (y < height && x < 8) {
+            if (x >= 8) break;  // Strip 경계 체크!
+            if (y < height) {
               // Alternate between high and low nibble
               const pixelColor = (z & 1) ? (color & 0xF) : (color >> 4);
               dst[y][x] = pixelColor;
@@ -326,7 +303,8 @@ export class ScummV3Decoder {
           }
 
           for (let z = 0; z < run; z++) {
-            if (y < height && x < 8) {
+            if (x >= 8) break;  // Strip 경계 체크!
+            if (y < height) {
               // Copy from previous column
               if (x > 0) {
                 dst[y][x] = dst[y][x - 1];
@@ -350,9 +328,11 @@ export class ScummV3Decoder {
           offset++;
         }
 
+        const pixelColor = color & 0xF;
         for (let z = 0; z < run; z++) {
-          if (y < height && x < 8) {
-            dst[y][x] = color & 0xF;
+          if (x >= 8) break;  // Strip 경계 체크!
+          if (y < height) {
+            dst[y][x] = pixelColor;
           }
 
           y++;

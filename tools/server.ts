@@ -16,6 +16,7 @@ function xorDecrypt(data: Uint8Array): Uint8Array {
 
 /**
  * SCUMM v3 Room에서 배경 이미지 데이터 추출 및 재구성
+ * Small header 포맷: Resource 0 = SMAP
  */
 function extractRoomImage(roomData: Uint8Array): Uint8Array | null {
   if (roomData.length < 10) return null;
@@ -28,71 +29,51 @@ function extractRoomImage(roomData: Uint8Array): Uint8Array | null {
 
   console.log(`  Room: ${width}x${height}px`);
 
-  // 리소스 오프셋 테이블은 0x0A부터 시작
+  // SMAP = Resource 0 (리소스 테이블 첫 번째)
   const resourceTableStart = 0x0A;
-  const resourceOffsets: number[] = [];
+  const smapPtr = roomData[resourceTableStart] | (roomData[resourceTableStart + 1] << 8);
 
-  // 리소스 오프셋 읽기
-  for (let i = 0; i < 20; i++) {
-    const pos = resourceTableStart + i * 2;
-    if (pos + 1 >= roomData.length) break;
-
-    const offset = roomData[pos] | (roomData[pos + 1] << 8);
-    if (offset === 0) break;
-    if (offset >= roomData.length) break;
-
-    resourceOffsets.push(offset);
-  }
-
-  if (resourceOffsets.length === 0) return null;
-
-  // 배경 이미지 리소스 찾기 (strip offset table을 포함하는 리소스)
-  let bgImageResourceOffset = 0;
-  let stripOffsets: number[] = [];
-
-  for (const resourceOffset of resourceOffsets) {
-    // 이 리소스가 strip offset table인지 확인
-    const potentialStrips: number[] = [];
-
-    for (let i = 0; i < 40; i++) {
-      const pos = resourceOffset + i * 2;
-      if (pos + 1 >= roomData.length) break;
-
-      const offset = roomData[pos] | (roomData[pos + 1] << 8);
-      if (offset === 0) break;
-      if (offset >= roomData.length) break;
-
-      potentialStrips.push(offset);
-    }
-
-    // Strip table인지 확인 (일정 간격으로 증가하는 offset)
-    if (potentialStrips.length >= 3) {
-      const gaps = [];
-      for (let i = 0; i < Math.min(5, potentialStrips.length - 1); i++) {
-        gaps.push(potentialStrips[i + 1] - potentialStrips[i]);
-      }
-      const avgGap = gaps.reduce((a, b) => a + b, 0) / gaps.length;
-
-      // 평균 간격이 10~5000 사이면 strip table
-      if (avgGap > 10 && avgGap < 5000) {
-        bgImageResourceOffset = resourceOffset;
-        stripOffsets = potentialStrips;
-        break;
-      }
-    }
-  }
-
-  if (stripOffsets.length === 0) {
-    console.log('  ❌ Background image resource not found');
+  if (smapPtr >= roomData.length) {
+    console.log('  ❌ Invalid SMAP offset');
     return null;
   }
 
-  console.log(`  ✅ Found ${stripOffsets.length} strips at resource offset 0x${bgImageResourceOffset.toString(16)}`);
+  console.log(`  SMAP offset: 0x${smapPtr.toString(16)}`);
+
+  // Strip offset 읽기 (16-color: SMAP+2부터)
+  const stripOffsets: number[] = [];
+  const maxStrips = Math.min(200, Math.ceil(width / 8));
+
+  for (let i = 0; i < maxStrips; i++) {
+    const offsetPos = smapPtr + 2 + i * 2;
+    if (offsetPos + 1 >= roomData.length) break;
+
+    const stripOffset = roomData[offsetPos] | (roomData[offsetPos + 1] << 8);
+
+    // 0이거나 범위 벗어나면 끝
+    if (stripOffset === 0 || smapPtr + stripOffset >= roomData.length) {
+      break;
+    }
+
+    // SMAP 기준 상대 주소 → 절대 주소
+    const absOffset = smapPtr + stripOffset;
+    stripOffsets.push(absOffset);
+  }
+
+  if (stripOffsets.length === 0) {
+    console.log('  ❌ No strips found');
+    return null;
+  }
+
+  console.log(`  ✅ Found ${stripOffsets.length} strips`);
 
   // 새로운 이미지 데이터 재구성
-  // [0x00-0x4F]: 새 strip offset table (상대 주소)
-  // [0x50-...]:  Strip 데이터들
+  // [0x00-0x01]: width (little-endian)
+  // [0x02-0x03]: height (little-endian)
+  // [0x04-...]:  새 strip offset table (상대 주소)
+  // [...]:       Strip 데이터들
 
+  const headerSize = 4; // width + height
   const newTableSize = stripOffsets.length * 2;
   let totalStripDataSize = 0;
 
@@ -107,18 +88,25 @@ function extractRoomImage(roomData: Uint8Array): Uint8Array | null {
   }
 
   // 새 데이터 버퍼 생성
-  const newData = new Uint8Array(newTableSize + totalStripDataSize);
+  const newData = new Uint8Array(headerSize + newTableSize + totalStripDataSize);
 
-  // 새 offset table 작성 (상대 주소)
-  let currentOffset = newTableSize;
+  // Width & height
+  newData[0] = width & 0xFF;
+  newData[1] = (width >> 8) & 0xFF;
+  newData[2] = height & 0xFF;
+  newData[3] = (height >> 8) & 0xFF;
+
+  // 새 offset table 작성 (상대 주소, headerSize 기준)
+  let currentOffset = headerSize + newTableSize;
   for (let i = 0; i < stripOffsets.length; i++) {
-    newData[i * 2] = currentOffset & 0xFF;
-    newData[i * 2 + 1] = (currentOffset >> 8) & 0xFF;
+    const tablePos = headerSize + i * 2;
+    newData[tablePos] = currentOffset & 0xFF;
+    newData[tablePos + 1] = (currentOffset >> 8) & 0xFF;
     currentOffset += stripSizes[i];
   }
 
   // Strip 데이터 복사
-  let writePos = newTableSize;
+  let writePos = headerSize + newTableSize;
   for (let i = 0; i < stripOffsets.length; i++) {
     const stripStart = stripOffsets[i];
     const stripSize = stripSizes[i];
@@ -127,8 +115,8 @@ function extractRoomImage(roomData: Uint8Array): Uint8Array | null {
     writePos += stripSize;
   }
 
-  console.log(`  📦 Reconstructed image: ${newData.length} bytes (${stripOffsets.length} strips)`);
-  console.log(`  📊 First 3 strip offsets: ${stripOffsets.slice(0, 3).map(o => `0x${o.toString(16)}`).join(', ')}`);
+  console.log(`  📦 Reconstructed: ${newData.length} bytes (${stripOffsets.length} strips)`);
+  console.log(`  📊 First 3 strips: ${stripOffsets.slice(0, 3).map(o => `0x${o.toString(16)}`).join(', ')}`);
 
   return newData;
 }

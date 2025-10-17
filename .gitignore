@@ -13,4 +13,7 @@
 
 # Temporary test files
 *.png
-!docs/*.pngresources/
+!docs/*.png
+
+# Extracted binary resources
+resources/

@@ -1,0 +1,306 @@
+{
+  "stats": {
+    "total": 248,
+    "success": 37,
+    "failed": 155,
+    "empty": 56
+  },
+  "objects": [
+    {
+      "room": "01",
+      "object_id": 0,
+      "width": 8,
+      "height": 32,
+      "strips": 1,
+      "file": "objects_png/room_01/object_000.png"
+    },
+    {
+      "room": "01",
+      "object_id": 1,
+      "width": 8,
+      "height": 32,
+      "strips": 1,
+      "file": "objects_png/room_01/object_001.png"
+    },
+    {
+      "room": "01",
+      "object_id": 2,
+      "width": 8,
+      "height": 32,
+      "strips": 1,
+      "file": "objects_png/room_01/object_002.png"
+    },
+    {
+      "room": "01",
+      "object_id": 3,
+      "width": 8,
+      "height": 32,
+      "strips": 1,
+      "file": "objects_png/room_01/object_003.png"
+    },
+    {
+      "room": "01",
+      "object_id": 4,
+      "width": 8,
+      "height": 32,
+      "strips": 1,
+      "file": "objects_png/room_01/object_004.png"
+    },
+    {
+      "room": "01",
+      "object_id": 5,
+      "width": 8,
+      "height": 32,
+      "strips": 1,
+      "file": "objects_png/room_01/object_005.png"
+    },
+    {
+      "room": "01",
+      "object_id": 42,
+      "width": 16,
+      "height": 32,
+      "strips": 2,
+      "file": "objects_png/room_01/object_042.png"
+    },
+    {
+      "room": "01",
+      "object_id": 43,
+      "width": 16,
+      "height": 32,
+      "strips": 2,
+      "file": "objects_png/room_01/object_043.png"
+    },
+    {
+      "room": "01",
+      "object_id": 44,
+      "width": 16,
+      "height": 32,
+      "strips": 2,
+      "file": "objects_png/room_01/object_044.png"
+    },
+    {
+      "room": "01",
+      "object_id": 45,
+      "width": 16,
+      "height": 32,
+      "strips": 2,
+      "file": "objects_png/room_01/object_045.png"
+    },
+    {
+      "room": "01",
+      "object_id": 46,
+      "width": 16,
+      "height": 32,
+      "strips": 2,
+      "file": "objects_png/room_01/object_046.png"
+    },
+    {
+      "room": "01",
+      "object_id": 47,
+      "width": 16,
+      "height": 32,
+      "strips": 2,
+      "file": "objects_png/room_01/object_047.png"
+    },
+    {
+      "room": "01",
+      "object_id": 48,
+      "width": 144,
+      "height": 32,
+      "strips": 18,
+      "file": "objects_png/room_01/object_048.png"
+    },
+    {
+      "room": "01",
+      "object_id": 51,
+      "width": 24,
+      "height": 32,
+      "strips": 3,
+      "file": "objects_png/room_01/object_051.png"
+    },
+    {
+      "room": "01",
+      "object_id": 52,
+      "width": 200,
+      "height": 64,
+      "strips": 25,
+      "file": "objects_png/room_01/object_052.png"
+    },
+    {
+      "room": "01",
+      "object_id": 109,
+      "width": 8,
+      "height": 64,
+      "strips": 1,
+      "file": "objects_png/room_01/object_109.png"
+    },
+    {
+      "room": "02",
+      "object_id": 2,
+      "width": 128,
+      "height": 48,
+      "strips": 16,
+      "file": "objects_png/room_02/object_002.png"
+    },
+    {
+      "room": "02",
+      "object_id": 5,
+      "width": 24,
+      "height": 32,
+      "strips": 3,
+      "file": "objects_png/room_02/object_005.png"
+    },
+    {
+      "room": "02",
+      "object_id": 6,
+      "width": 24,
+      "height": 32,
+      "strips": 3,
+      "file": "objects_png/room_02/object_006.png"
+    },
+    {
+      "room": "02",
+      "object_id": 14,
+      "width": 16,
+      "height": 64,
+      "strips": 2,
+      "file": "objects_png/room_02/object_014.png"
+    },
+    {
+      "room": "02",
+      "object_id": 16,
+      "width": 8,
+      "height": 64,
+      "strips": 1,
+      "file": "objects_png/room_02/object_016.png"
+    },
+    {
+      "room": "02",
+      "object_id": 20,
+      "width": 8,
+      "height": 64,
+      "strips": 1,
+      "file": "objects_png/room_02/object_020.png"
+    },
+    {
+      "room": "02",
+      "object_id": 28,
+      "width": 32,
+      "height": 64,
+      "strips": 4,
+      "file": "objects_png/room_02/object_028.png"
+    },
+    {
+      "room": "02",
+      "object_id": 32,
+      "width": 24,
+      "height": 64,
+      "strips": 3,
+      "file": "objects_png/room_02/object_032.png"
+    },
+    {
+      "room": "02",
+      "object_id": 38,
+      "width": 8,
+      "height": 64,
+      "strips": 1,
+      "file": "objects_png/room_02/object_038.png"
+    },
+    {
+      "room": "02",
+      "object_id": 41,
+      "width": 24,
+      "height": 64,
+      "strips": 3,
+      "file": "objects_png/room_02/object_041.png"
+    },
+    {
+      "room": "02",
+      "object_id": 48,
+      "width": 8,
+      "height": 64,
+      "strips": 1,
+      "file": "objects_png/room_02/object_048.png"
+    },
+    {
+      "room": "03",
+      "object_id": 6,
+      "width": 24,
+      "height": 32,
+      "strips": 3,
+      "file": "objects_png/room_03/object_006.png"
+    },
+    {
+      "room": "04",
+      "object_id": 23,
+      "width": 24,
+      "height": 32,
+      "strips": 3,
+      "file": "objects_png/room_04/object_023.png"
+    },
+    {
+      "room": "04",
+      "object_id": 24,
+      "width": 24,
+      "height": 32,
+      "strips": 3,
+      "file": "objects_png/room_04/object_024.png"
+    },
+    {
+      "room": "04",
+      "object_id": 25,
+      "width": 24,
+      "height": 32,
+      "strips": 3,
+      "file": "objects_png/room_04/object_025.png"
+    },
+    {
+      "room": "04",
+      "object_id": 26,
+      "width": 24,
+      "height": 32,
+      "strips": 3,
+      "file": "objects_png/room_04/object_026.png"
+    },
+    {
+      "room": "04",
+      "object_id": 27,
+      "width": 24,
+      "height": 32,
+      "strips": 3,
+      "file": "objects_png/room_04/object_027.png"
+    },
+    {
+      "room": "04",
+      "object_id": 28,
+      "width": 24,
+      "height": 32,
+      "strips": 3,
+      "file": "objects_png/room_04/object_028.png"
+    },
+    {
+      "room": "04",
+      "object_id": 29,
+      "width": 24,
+      "height": 32,
+      "strips": 3,
+      "file": "objects_png/room_04/object_029.png"
+    },
+    {
+      "room": "04",
+      "object_id": 31,
+      "width": 24,
+      "height": 32,
+      "strips": 3,
+      "file": "objects_png/room_04/object_031.png"
+    },
+    {
+      "room": "04",
+      "object_id": 35,
+      "width": 8,
+      "height": 48,
+      "strips": 1,
+      "file": "objects_png/room_04/object_035.png"
+    }
+  ]
+}

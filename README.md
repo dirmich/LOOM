@@ -50,7 +50,8 @@ LOOM/
 ├── sounds_midi/           # 🎵 사운드 (385개 RO - ScummVM용)
 ├── sounds_standard_midi/  # 🎵 사운드 (385개 MID - 표준 MIDI)
 │
-├── resource_catalog.html  # 📚 모든 리소스 HTML 카탈로그
+├── interactive_viewer.html # 🌟 인터랙티브 리소스 뷰어 (추천!)
+├── resource_catalog.html  # 📚 정적 HTML 카탈로그
 │
 ├── tools/                 # 🔧 주요 도구 (9개)
 │   ├── extract_resources.py
@@ -68,7 +69,20 @@ LOOM/
 
 ## 🚀 리소스 보기
 
-### 1. HTML 카탈로그 (권장! ⭐)
+### 1. 인터랙티브 뷰어 (최고! 🌟)
+
+```bash
+open interactive_viewer.html
+```
+
+**완전한 인터랙티브 경험:**
+- ✨ 탭 기반 UI (개요/배경/오브젝트/사운드/스크립트)
+- 🖼️ 전체화면 슬라이드쇼 (키보드 단축키 지원)
+- 🎵 MIDI 플레이어 내장
+- 🔍 실시간 검색 기능
+- ⌨️ 키보드 단축키 (←/→/ESC)
+
+### 2. HTML 카탈로그 (정적 버전)
 
 ```bash
 open resource_catalog.html
@@ -80,7 +94,7 @@ open resource_catalog.html
 - 스크립트 17개 (목록)
 - 사운드 385개 (처음 50개 + 안내)
 
-### 2. 개별 리소스
+### 3. 개별 리소스
 
 ```bash
 # 배경 이미지

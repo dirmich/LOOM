@@ -1,0 +1,1526 @@
+{
+  "total_rooms": 4,
+  "total_objects": 248,
+  "rooms": [
+    {
+      "room": "01",
+      "width": 320,
+      "height": 144,
+      "num_objects": 113,
+      "objects": [
+        {
+          "id": 0,
+          "obim_offset": 6366,
+          "obcd_offset": 62922,
+          "obim_size": 109
+        },
+        {
+          "id": 1,
+          "obim_offset": 6475,
+          "obcd_offset": 52038,
+          "obim_size": 120
+        },
+        {
+          "id": 2,
+          "obim_offset": 6595,
+          "obcd_offset": 18198,
+          "obim_size": 185
+        },
+        {
+          "id": 3,
+          "obim_offset": 6780,
+          "obcd_offset": 14284,
+          "obim_size": 211
+        },
+        {
+          "id": 4,
+          "obim_offset": 6991,
+          "obcd_offset": 52551,
+          "obim_size": 161
+        },
+        {
+          "id": 5,
+          "obim_offset": 7152,
+          "obcd_offset": 18264,
+          "obim_size": 168
+        },
+        {
+          "id": 6,
+          "obim_offset": 7320,
+          "obcd_offset": 31182,
+          "obim_size": 75
+        },
+        {
+          "id": 7,
+          "obim_offset": 7395,
+          "obcd_offset": 53063,
+          "obim_size": 86
+        },
+        {
+          "id": 8,
+          "obim_offset": 7481,
+          "obcd_offset": 18330,
+          "obim_size": 120
+        },
+        {
+          "id": 9,
+          "obim_offset": 7601,
+          "obcd_offset": 48080,
+          "obim_size": 141
+        },
+        {
+          "id": 10,
+          "obim_offset": 7742,
+          "obcd_offset": 53575,
+          "obim_size": 119
+        },
+        {
+          "id": 11,
+          "obim_offset": 7861,
+          "obcd_offset": 18396,
+          "obim_size": 136
+        },
+        {
+          "id": 12,
+          "obim_offset": 7997,
+          "obcd_offset": 64978,
+          "obim_size": 75
+        },
+        {
+          "id": 13,
+          "obim_offset": 8072,
+          "obcd_offset": 54087,
+          "obim_size": 90
+        },
+        {
+          "id": 14,
+          "obim_offset": 8162,
+          "obcd_offset": 18627,
+          "obim_size": 128
+        },
+        {
+          "id": 15,
+          "obim_offset": 8290,
+          "obcd_offset": 256,
+          "obim_size": 134
+        },
+        {
+          "id": 16,
+          "obim_offset": 8424,
+          "obcd_offset": 132,
+          "obim_size": 135
+        },
+        {
+          "id": 17,
+          "obim_offset": 8559,
+          "obcd_offset": 42,
+          "obim_size": 149
+        },
+        {
+          "id": 18,
+          "obim_offset": 8708,
+          "obcd_offset": 137,
+          "obim_size": 85
+        },
+        {
+          "id": 19,
+          "obim_offset": 8793,
+          "obcd_offset": 42,
+          "obim_size": 102
+        },
+        {
+          "id": 20,
+          "obim_offset": 8895,
+          "obcd_offset": 137,
+          "obim_size": 129
+        },
+        {
+          "id": 21,
+          "obim_offset": 9024,
+          "obcd_offset": 48,
+          "obim_size": 129
+        },
+        {
+          "id": 22,
+          "obim_offset": 9153,
+          "obcd_offset": 132,
+          "obim_size": 134
+        },
+        {
+          "id": 23,
+          "obim_offset": 9287,
+          "obcd_offset": 48,
+          "obim_size": 140
+        },
+        {
+          "id": 24,
+          "obim_offset": 9427,
+          "obcd_offset": 0,
+          "obim_size": 60
+        },
+        {
+          "id": 25,
+          "obim_offset": 9487,
+          "obcd_offset": 0,
+          "obim_size": 77
+        },
+        {
+          "id": 26,
+          "obim_offset": 9564,
+          "obcd_offset": 65280,
+          "obim_size": 95
+        },
+        {
+          "id": 27,
+          "obim_offset": 9659,
+          "obcd_offset": 5977,
+          "obim_size": 113
+        },
+        {
+          "id": 28,
+          "obim_offset": 9772,
+          "obcd_offset": 82,
+          "obim_size": 121
+        },
+        {
+          "id": 29,
+          "obim_offset": 9893,
+          "obcd_offset": 260,
+          "obim_size": 124
+        },
+        {
+          "id": 30,
+          "obim_offset": 10017,
+          "obcd_offset": 367,
+          "obim_size": 87
+        },
+        {
+          "id": 31,
+          "obim_offset": 10104,
+          "obcd_offset": 514,
+          "obim_size": 96
+        },
+        {
+          "id": 32,
+          "obim_offset": 10200,
+          "obcd_offset": 636,
+          "obim_size": 119
+        },
+        {
+          "id": 33,
+          "obim_offset": 10319,
+          "obcd_offset": 734,
+          "obim_size": 119
+        },
+        {
+          "id": 34,
+          "obim_offset": 10438,
+          "obcd_offset": 875,
+          "obim_size": 142
+        },
+        {
+          "id": 35,
+          "obim_offset": 10580,
+          "obcd_offset": 982,
+          "obim_size": 117
+        },
+        {
+          "id": 36,
+          "obim_offset": 10697,
+          "obcd_offset": 1096,
+          "obim_size": 73
+        },
+        {
+          "id": 37,
+          "obim_offset": 10770,
+          "obcd_offset": 1210,
+          "obim_size": 86
+        },
+        {
+          "id": 38,
+          "obim_offset": 10856,
+          "obcd_offset": 1353,
+          "obim_size": 112
+        },
+        {
+          "id": 39,
+          "obim_offset": 10968,
+          "obcd_offset": 1472,
+          "obim_size": 127
+        },
+        {
+          "id": 40,
+          "obim_offset": 11095,
+          "obcd_offset": 1581,
+          "obim_size": 131
+        },
+        {
+          "id": 41,
+          "obim_offset": 11226,
+          "obcd_offset": 1699,
+          "obim_size": 128
+        },
+        {
+          "id": 42,
+          "obim_offset": 11354,
+          "obcd_offset": 1838,
+          "obim_size": 100
+        },
+        {
+          "id": 43,
+          "obim_offset": 11454,
+          "obcd_offset": 1980,
+          "obim_size": 110
+        },
+        {
+          "id": 44,
+          "obim_offset": 11564,
+          "obcd_offset": 2123,
+          "obim_size": 136
+        },
+        {
+          "id": 45,
+          "obim_offset": 11700,
+          "obcd_offset": 2297,
+          "obim_size": 157
+        },
+        {
+          "id": 46,
+          "obim_offset": 11857,
+          "obcd_offset": 2480,
+          "obim_size": 174
+        },
+        {
+          "id": 47,
+          "obim_offset": 12031,
+          "obcd_offset": 2643,
+          "obim_size": 199
+        },
+        {
+          "id": 48,
+          "obim_offset": 12230,
+          "obcd_offset": 2845,
+          "obim_size": 408
+        },
+        {
+          "id": 49,
+          "obim_offset": 12638,
+          "obcd_offset": 3037,
+          "obim_size": 67
+        },
+        {
+          "id": 50,
+          "obim_offset": 12705,
+          "obcd_offset": 3212,
+          "obim_size": 70
+        },
+        {
+          "id": 51,
+          "obim_offset": 12775,
+          "obcd_offset": 3374,
+          "obim_size": 76
+        },
+        {
+          "id": 52,
+          "obim_offset": 12851,
+          "obcd_offset": 3549,
+          "obim_size": 4250
+        },
+        {
+          "id": 53,
+          "obim_offset": 17101,
+          "obcd_offset": 3714,
+          "obim_size": 19
+        },
+        {
+          "id": 54,
+          "obim_offset": 17120,
+          "obcd_offset": 3861,
+          "obim_size": 19
+        },
+        {
+          "id": 55,
+          "obim_offset": 17139,
+          "obcd_offset": 4023,
+          "obim_size": 19
+        },
+        {
+          "id": 56,
+          "obim_offset": 17158,
+          "obcd_offset": 4226,
+          "obim_size": 19
+        },
+        {
+          "id": 57,
+          "obim_offset": 17177,
+          "obcd_offset": 4370,
+          "obim_size": 19
+        },
+        {
+          "id": 58,
+          "obim_offset": 17196,
+          "obcd_offset": 4508,
+          "obim_size": 19
+        },
+        {
+          "id": 59,
+          "obim_offset": 17215,
+          "obcd_offset": 4640,
+          "obim_size": 19
+        },
+        {
+          "id": 60,
+          "obim_offset": 17234,
+          "obcd_offset": 4779,
+          "obim_size": 19
+        },
+        {
+          "id": 61,
+          "obim_offset": 17253,
+          "obcd_offset": 4930,
+          "obim_size": 19
+        },
+        {
+          "id": 62,
+          "obim_offset": 17272,
+          "obcd_offset": 5088,
+          "obim_size": 19
+        },
+        {
+          "id": 63,
+          "obim_offset": 17291,
+          "obcd_offset": 5215,
+          "obim_size": 19
+        },
+        {
+          "id": 64,
+          "obim_offset": 17310,
+          "obcd_offset": 5354,
+          "obim_size": 19
+        },
+        {
+          "id": 65,
+          "obim_offset": 17329,
+          "obcd_offset": 5551,
+          "obim_size": 19
+        },
+        {
+          "id": 66,
+          "obim_offset": 17348,
+          "obcd_offset": 5690,
+          "obim_size": 19
+        },
+        {
+          "id": 67,
+          "obim_offset": 17367,
+          "obcd_offset": 5849,
+          "obim_size": 19
+        },
+        {
+          "id": 68,
+          "obim_offset": 17386,
+          "obcd_offset": 3072,
+          "obim_size": 19
+        },
+        {
+          "id": 69,
+          "obim_offset": 17405,
+          "obcd_offset": 20511,
+          "obim_size": 19
+        },
+        {
+          "id": 70,
+          "obim_offset": 17424,
+          "obcd_offset": 4292,
+          "obim_size": 19
+        },
+        {
+          "id": 71,
+          "obim_offset": 17443,
+          "obcd_offset": 4368,
+          "obim_size": 19
+        },
+        {
+          "id": 72,
+          "obim_offset": 17462,
+          "obcd_offset": 4384,
+          "obim_size": 19
+        },
+        {
+          "id": 73,
+          "obim_offset": 17481,
+          "obcd_offset": 8496,
+          "obim_size": 19
+        },
+        {
+          "id": 74,
+          "obim_offset": 17500,
+          "obcd_offset": 8473,
+          "obim_size": 19
+        },
+        {
+          "id": 75,
+          "obim_offset": 17519,
+          "obcd_offset": 454,
+          "obim_size": 19
+        },
+        {
+          "id": 76,
+          "obim_offset": 17538,
+          "obcd_offset": 53019,
+          "obim_size": 19
+        },
+        {
+          "id": 77,
+          "obim_offset": 17557,
+          "obcd_offset": 4368,
+          "obim_size": 19
+        },
+        {
+          "id": 78,
+          "obim_offset": 17576,
+          "obcd_offset": 49945,
+          "obim_size": 19
+        },
+        {
+          "id": 79,
+          "obim_offset": 17595,
+          "obcd_offset": 6463,
+          "obim_size": 19
+        },
+        {
+          "id": 80,
+          "obim_offset": 17614,
+          "obcd_offset": 50209,
+          "obim_size": 19
+        },
+        {
+          "id": 81,
+          "obim_offset": 17633,
+          "obcd_offset": 4353,
+          "obim_size": 19
+        },
+        {
+          "id": 82,
+          "obim_offset": 17652,
+          "obcd_offset": 20752,
+          "obim_size": 19
+        },
+        {
+          "id": 83,
+          "obim_offset": 17671,
+          "obcd_offset": 12585,
+          "obim_size": 19
+        },
+        {
+          "id": 84,
+          "obim_offset": 17690,
+          "obcd_offset": 6937,
+          "obim_size": 19
+        },
+        {
+          "id": 85,
+          "obim_offset": 17709,
+          "obcd_offset": 4393,
+          "obim_size": 19
+        },
+        {
+          "id": 86,
+          "obim_offset": 17728,
+          "obcd_offset": 281,
+          "obim_size": 19
+        },
+        {
+          "id": 87,
+          "obim_offset": 17747,
+          "obcd_offset": 6423,
+          "obim_size": 19
+        },
+        {
+          "id": 88,
+          "obim_offset": 17766,
+          "obcd_offset": 3585,
+          "obim_size": 19
+        },
+        {
+          "id": 89,
+          "obim_offset": 17785,
+          "obcd_offset": 275,
+          "obim_size": 19
+        },
+        {
+          "id": 90,
+          "obim_offset": 17804,
+          "obcd_offset": 10,
+          "obim_size": 19
+        },
+        {
+          "id": 91,
+          "obim_offset": 17823,
+          "obcd_offset": 4384,
+          "obim_size": 19
+        },
+        {
+          "id": 92,
+          "obim_offset": 17842,
+          "obcd_offset": 4384,
+          "obim_size": 19
+        },
+        {
+          "id": 93,
+          "obim_offset": 17861,
+          "obcd_offset": 8577,
+          "obim_size": 19
+        },
+        {
+          "id": 94,
+          "obim_offset": 17880,
+          "obcd_offset": 37827,
+          "obim_size": 19
+        },
+        {
+          "id": 95,
+          "obim_offset": 17899,
+          "obcd_offset": 54817,
+          "obim_size": 19
+        },
+        {
+          "id": 96,
+          "obim_offset": 17918,
+          "obcd_offset": 4353,
+          "obim_size": 19
+        },
+        {
+          "id": 97,
+          "obim_offset": 17937,
+          "obcd_offset": 37827,
+          "obim_size": 19
+        },
+        {
+          "id": 98,
+          "obim_offset": 17956,
+          "obcd_offset": 4129,
+          "obim_size": 19
+        },
+        {
+          "id": 99,
+          "obim_offset": 17975,
+          "obcd_offset": 3073,
+          "obim_size": 19
+        },
+        {
+          "id": 100,
+          "obim_offset": 17994,
+          "obcd_offset": 389,
+          "obim_size": 38
+        },
+        {
+          "id": 101,
+          "obim_offset": 18032,
+          "obcd_offset": 6426,
+          "obim_size": 19
+        },
+        {
+          "id": 102,
+          "obim_offset": 18051,
+          "obcd_offset": 10523,
+          "obim_size": 19
+        },
+        {
+          "id": 103,
+          "obim_offset": 18070,
+          "obcd_offset": 6529,
+          "obim_size": 0
+        },
+        {
+          "id": 104,
+          "obim_offset": 18013,
+          "obcd_offset": 5633,
+          "obim_size": 0
+        },
+        {
+          "id": 105,
+          "obim_offset": 17082,
+          "obcd_offset": 4509,
+          "obim_size": 0
+        },
+        {
+          "id": 106,
+          "obim_offset": 513,
+          "obcd_offset": 12608,
+          "obim_size": 514
+        },
+        {
+          "id": 107,
+          "obim_offset": 1027,
+          "obcd_offset": 49961,
+          "obim_size": 514
+        },
+        {
+          "id": 108,
+          "obim_offset": 1541,
+          "obcd_offset": 10555,
+          "obim_size": 514
+        },
+        {
+          "id": 109,
+          "obim_offset": 2055,
+          "obcd_offset": 54321,
+          "obim_size": 43969
+        },
+        {
+          "id": 110,
+          "obim_offset": 46024,
+          "obcd_offset": 4353,
+          "obim_size": 5502
+        },
+        {
+          "id": 111,
+          "obim_offset": 51526,
+          "obcd_offset": 8473,
+          "obim_size": 0
+        },
+        {
+          "id": 112,
+          "obim_offset": 18132,
+          "obcd_offset": 454,
+          "obim_size": 100
+        }
+      ]
+    },
+    {
+      "room": "02",
+      "width": 960,
+      "height": 144,
+      "num_objects": 57,
+      "objects": [
+        {
+          "id": 0,
+          "obim_offset": 21566,
+          "obcd_offset": 0,
+          "obim_size": 0
+        },
+        {
+          "id": 1,
+          "obim_offset": 21566,
+          "obcd_offset": 30720,
+          "obim_size": 0
+        },
+        {
+          "id": 2,
+          "obim_offset": 21566,
+          "obcd_offset": 20483,
+          "obim_size": 1510
+        },
+        {
+          "id": 3,
+          "obim_offset": 23076,
+          "obcd_offset": 30720,
+          "obim_size": 0
+        },
+        {
+          "id": 4,
+          "obim_offset": 23076,
+          "obcd_offset": 20483,
+          "obim_size": 102
+        },
+        {
+          "id": 5,
+          "obim_offset": 23178,
+          "obcd_offset": 16384,
+          "obim_size": 387
+        },
+        {
+          "id": 6,
+          "obim_offset": 23565,
+          "obcd_offset": 15363,
+          "obim_size": 153
+        },
+        {
+          "id": 7,
+          "obim_offset": 23718,
+          "obcd_offset": 16384,
+          "obim_size": 74
+        },
+        {
+          "id": 8,
+          "obim_offset": 23792,
+          "obcd_offset": 15363,
+          "obim_size": 506
+        },
+        {
+          "id": 9,
+          "obim_offset": 24298,
+          "obcd_offset": 0,
+          "obim_size": 0
+        },
+        {
+          "id": 10,
+          "obim_offset": 23985,
+          "obcd_offset": 36353,
+          "obim_size": 294
+        },
+        {
+          "id": 11,
+          "obim_offset": 24279,
+          "obcd_offset": 20483,
+          "obim_size": 38
+        },
+        {
+          "id": 12,
+          "obim_offset": 24317,
+          "obcd_offset": 36352,
+          "obim_size": 19
+        },
+        {
+          "id": 13,
+          "obim_offset": 24336,
+          "obcd_offset": 20483,
+          "obim_size": 0
+        },
+        {
+          "id": 14,
+          "obim_offset": 11720,
+          "obcd_offset": 31232,
+          "obim_size": 39832
+        },
+        {
+          "id": 15,
+          "obim_offset": 51552,
+          "obcd_offset": 20483,
+          "obim_size": 0
+        },
+        {
+          "id": 16,
+          "obim_offset": 24674,
+          "obcd_offset": 31232,
+          "obim_size": 21096
+        },
+        {
+          "id": 17,
+          "obim_offset": 45770,
+          "obcd_offset": 20483,
+          "obim_size": 6294
+        },
+        {
+          "id": 18,
+          "obim_offset": 52064,
+          "obcd_offset": 0,
+          "obim_size": 0
+        },
+        {
+          "id": 19,
+          "obim_offset": 24769,
+          "obcd_offset": 36864,
+          "obim_size": 0
+        },
+        {
+          "id": 20,
+          "obim_offset": 13516,
+          "obcd_offset": 20483,
+          "obim_size": 39061
+        },
+        {
+          "id": 21,
+          "obim_offset": 52577,
+          "obcd_offset": 36864,
+          "obim_size": 0
+        },
+        {
+          "id": 22,
+          "obim_offset": 24954,
+          "obcd_offset": 20483,
+          "obim_size": 18004
+        },
+        {
+          "id": 23,
+          "obim_offset": 42958,
+          "obcd_offset": 31232,
+          "obim_size": 10131
+        },
+        {
+          "id": 24,
+          "obim_offset": 53089,
+          "obcd_offset": 30211,
+          "obim_size": 0
+        },
+        {
+          "id": 25,
+          "obim_offset": 25072,
+          "obcd_offset": 31232,
+          "obim_size": 0
+        },
+        {
+          "id": 26,
+          "obim_offset": 19920,
+          "obcd_offset": 30211,
+          "obim_size": 33682
+        },
+        {
+          "id": 27,
+          "obim_offset": 53602,
+          "obcd_offset": 256,
+          "obim_size": 0
+        },
+        {
+          "id": 28,
+          "obim_offset": 25248,
+          "obcd_offset": 30738,
+          "obim_size": 28210
+        },
+        {
+          "id": 29,
+          "obim_offset": 53458,
+          "obcd_offset": 30211,
+          "obim_size": 657
+        },
+        {
+          "id": 30,
+          "obim_offset": 54115,
+          "obcd_offset": 30720,
+          "obim_size": 0
+        },
+        {
+          "id": 31,
+          "obim_offset": 25601,
+          "obcd_offset": 30211,
+          "obim_size": 0
+        },
+        {
+          "id": 32,
+          "obim_offset": 15572,
+          "obcd_offset": 17664,
+          "obim_size": 39056
+        },
+        {
+          "id": 33,
+          "obim_offset": 54628,
+          "obcd_offset": 30211,
+          "obim_size": 0
+        },
+        {
+          "id": 34,
+          "obim_offset": 25748,
+          "obcd_offset": 17664,
+          "obim_size": 20546
+        },
+        {
+          "id": 35,
+          "obim_offset": 46294,
+          "obcd_offset": 30211,
+          "obim_size": 8846
+        },
+        {
+          "id": 36,
+          "obim_offset": 55140,
+          "obcd_offset": 256,
+          "obim_size": 0
+        },
+        {
+          "id": 37,
+          "obim_offset": 25913,
+          "obcd_offset": 6144,
+          "obim_size": 19103
+        },
+        {
+          "id": 38,
+          "obim_offset": 45016,
+          "obcd_offset": 30211,
+          "obim_size": 10637
+        },
+        {
+          "id": 39,
+          "obim_offset": 55653,
+          "obcd_offset": 6144,
+          "obim_size": 0
+        },
+        {
+          "id": 40,
+          "obim_offset": 26069,
+          "obcd_offset": 30211,
+          "obim_size": 0
+        },
+        {
+          "id": 41,
+          "obim_offset": 15578,
+          "obcd_offset": 17152,
+          "obim_size": 40588
+        },
+        {
+          "id": 42,
+          "obim_offset": 56166,
+          "obcd_offset": 30211,
+          "obim_size": 0
+        },
+        {
+          "id": 43,
+          "obim_offset": 26210,
+          "obcd_offset": 17152,
+          "obim_size": 8826
+        },
+        {
+          "id": 44,
+          "obim_offset": 35036,
+          "obcd_offset": 30211,
+          "obim_size": 21642
+        },
+        {
+          "id": 45,
+          "obim_offset": 56678,
+          "obcd_offset": 256,
+          "obim_size": 0
+        },
+        {
+          "id": 46,
+          "obim_offset": 26319,
+          "obcd_offset": 57856,
+          "obim_size": 0
+        },
+        {
+          "id": 47,
+          "obim_offset": 6622,
+          "obcd_offset": 26114,
+          "obim_size": 0
+        },
+        {
+          "id": 48,
+          "obim_offset": 103,
+          "obcd_offset": 57856,
+          "obim_size": 15784
+        },
+        {
+          "id": 49,
+          "obim_offset": 15887,
+          "obcd_offset": 26114,
+          "obim_size": 0
+        },
+        {
+          "id": 50,
+          "obim_offset": 15363,
+          "obcd_offset": 5632,
+          "obim_size": 509
+        },
+        {
+          "id": 51,
+          "obim_offset": 15872,
+          "obcd_offset": 30211,
+          "obim_size": 0
+        },
+        {
+          "id": 52,
+          "obim_offset": 15363,
+          "obcd_offset": 5632,
+          "obim_size": 0
+        },
+        {
+          "id": 53,
+          "obim_offset": 11008,
+          "obcd_offset": 30211,
+          "obim_size": 4355
+        },
+        {
+          "id": 54,
+          "obim_offset": 15363,
+          "obcd_offset": 256,
+          "obim_size": 0
+        },
+        {
+          "id": 55,
+          "obim_offset": 11008,
+          "obcd_offset": 57344,
+          "obim_size": 4355
+        },
+        {
+          "id": 56,
+          "obim_offset": 15363,
+          "obcd_offset": 26114,
+          "obim_size": 10751
+        }
+      ]
+    },
+    {
+      "room": "03",
+      "width": 320,
+      "height": 144,
+      "num_objects": 14,
+      "objects": [
+        {
+          "id": 0,
+          "obim_offset": 11371,
+          "obcd_offset": 20680,
+          "obim_size": 0
+        },
+        {
+          "id": 1,
+          "obim_offset": 11371,
+          "obcd_offset": 51503,
+          "obim_size": 0
+        },
+        {
+          "id": 2,
+          "obim_offset": 11371,
+          "obcd_offset": 12129,
+          "obim_size": 0
+        },
+        {
+          "id": 3,
+          "obim_offset": 11371,
+          "obcd_offset": 29386,
+          "obim_size": 0
+        },
+        {
+          "id": 4,
+          "obim_offset": 11371,
+          "obcd_offset": 47,
+          "obim_size": 0
+        },
+        {
+          "id": 5,
+          "obim_offset": 11371,
+          "obcd_offset": 10503,
+          "obim_size": 0
+        },
+        {
+          "id": 6,
+          "obim_offset": 11371,
+          "obcd_offset": 16128,
+          "obim_size": 240
+        },
+        {
+          "id": 7,
+          "obim_offset": 11611,
+          "obcd_offset": 10496,
+          "obim_size": 0
+        },
+        {
+          "id": 8,
+          "obim_offset": 11524,
+          "obcd_offset": 16128,
+          "obim_size": 29
+        },
+        {
+          "id": 9,
+          "obim_offset": 11553,
+          "obcd_offset": 30976,
+          "obim_size": 29
+        },
+        {
+          "id": 10,
+          "obim_offset": 11582,
+          "obcd_offset": 16128,
+          "obim_size": 65
+        },
+        {
+          "id": 11,
+          "obim_offset": 11647,
+          "obcd_offset": 30976,
+          "obim_size": 26
+        },
+        {
+          "id": 12,
+          "obim_offset": 11673,
+          "obcd_offset": 16128,
+          "obim_size": 145
+        },
+        {
+          "id": 13,
+          "obim_offset": 11818,
+          "obcd_offset": 256,
+          "obim_size": 100
+        }
+      ]
+    },
+    {
+      "room": "04",
+      "width": 640,
+      "height": 144,
+      "num_objects": 64,
+      "objects": [
+        {
+          "id": 0,
+          "obim_offset": 23521,
+          "obcd_offset": 51211,
+          "obim_size": 0
+        },
+        {
+          "id": 1,
+          "obim_offset": 23521,
+          "obcd_offset": 28202,
+          "obim_size": 0
+        },
+        {
+          "id": 2,
+          "obim_offset": 23521,
+          "obcd_offset": 7625,
+          "obim_size": 0
+        },
+        {
+          "id": 3,
+          "obim_offset": 23521,
+          "obcd_offset": 51824,
+          "obim_size": 0
+        },
+        {
+          "id": 4,
+          "obim_offset": 23521,
+          "obcd_offset": 28850,
+          "obim_size": 0
+        },
+        {
+          "id": 5,
+          "obim_offset": 23521,
+          "obcd_offset": 7627,
+          "obim_size": 0
+        },
+        {
+          "id": 6,
+          "obim_offset": 23521,
+          "obcd_offset": 52338,
+          "obim_size": 0
+        },
+        {
+          "id": 7,
+          "obim_offset": 23521,
+          "obcd_offset": 29241,
+          "obim_size": 0
+        },
+        {
+          "id": 8,
+          "obim_offset": 23521,
+          "obcd_offset": 20941,
+          "obim_size": 0
+        },
+        {
+          "id": 9,
+          "obim_offset": 23521,
+          "obcd_offset": 52850,
+          "obim_size": 0
+        },
+        {
+          "id": 10,
+          "obim_offset": 23521,
+          "obcd_offset": 29289,
+          "obim_size": 0
+        },
+        {
+          "id": 11,
+          "obim_offset": 23521,
+          "obcd_offset": 37327,
+          "obim_size": 79
+        },
+        {
+          "id": 12,
+          "obim_offset": 23600,
+          "obcd_offset": 53362,
+          "obim_size": 104
+        },
+        {
+          "id": 13,
+          "obim_offset": 23704,
+          "obcd_offset": 29364,
+          "obim_size": 119
+        },
+        {
+          "id": 14,
+          "obim_offset": 23823,
+          "obcd_offset": 60113,
+          "obim_size": 41
+        },
+        {
+          "id": 15,
+          "obim_offset": 23864,
+          "obcd_offset": 114,
+          "obim_size": 48
+        },
+        {
+          "id": 16,
+          "obim_offset": 23912,
+          "obcd_offset": 53253,
+          "obim_size": 49
+        },
+        {
+          "id": 17,
+          "obim_offset": 23961,
+          "obcd_offset": 33792,
+          "obim_size": 38
+        },
+        {
+          "id": 18,
+          "obim_offset": 23999,
+          "obcd_offset": 38912,
+          "obim_size": 45
+        },
+        {
+          "id": 19,
+          "obim_offset": 24044,
+          "obcd_offset": 33794,
+          "obim_size": 49
+        },
+        {
+          "id": 20,
+          "obim_offset": 24093,
+          "obcd_offset": 38912,
+          "obim_size": 79
+        },
+        {
+          "id": 21,
+          "obim_offset": 24172,
+          "obcd_offset": 34306,
+          "obim_size": 100
+        },
+        {
+          "id": 22,
+          "obim_offset": 24272,
+          "obcd_offset": 53248,
+          "obim_size": 91
+        },
+        {
+          "id": 23,
+          "obim_offset": 24363,
+          "obcd_offset": 34304,
+          "obim_size": 203
+        },
+        {
+          "id": 24,
+          "obim_offset": 24566,
+          "obcd_offset": 256,
+          "obim_size": 202
+        },
+        {
+          "id": 25,
+          "obim_offset": 24768,
+          "obcd_offset": 35840,
+          "obim_size": 198
+        },
+        {
+          "id": 26,
+          "obim_offset": 24966,
+          "obcd_offset": 33792,
+          "obim_size": 263
+        },
+        {
+          "id": 27,
+          "obim_offset": 25229,
+          "obcd_offset": 52736,
+          "obim_size": 266
+        },
+        {
+          "id": 28,
+          "obim_offset": 25495,
+          "obcd_offset": 33792,
+          "obim_size": 172
+        },
+        {
+          "id": 29,
+          "obim_offset": 25667,
+          "obcd_offset": 52736,
+          "obim_size": 335
+        },
+        {
+          "id": 30,
+          "obim_offset": 26002,
+          "obcd_offset": 34304,
+          "obim_size": 0
+        },
+        {
+          "id": 31,
+          "obim_offset": 26002,
+          "obcd_offset": 35840,
+          "obim_size": 319
+        },
+        {
+          "id": 32,
+          "obim_offset": 26321,
+          "obcd_offset": 34304,
+          "obim_size": 37
+        },
+        {
+          "id": 33,
+          "obim_offset": 26358,
+          "obcd_offset": 0,
+          "obim_size": 0
+        },
+        {
+          "id": 34,
+          "obim_offset": 26238,
+          "obcd_offset": 12800,
+          "obim_size": 0
+        },
+        {
+          "id": 35,
+          "obim_offset": 26155,
+          "obcd_offset": 31744,
+          "obim_size": 573
+        },
+        {
+          "id": 36,
+          "obim_offset": 26728,
+          "obcd_offset": 35328,
+          "obim_size": 99
+        },
+        {
+          "id": 37,
+          "obim_offset": 26827,
+          "obcd_offset": 31744,
+          "obim_size": 99
+        },
+        {
+          "id": 38,
+          "obim_offset": 26926,
+          "obcd_offset": 35328,
+          "obim_size": 99
+        },
+        {
+          "id": 39,
+          "obim_offset": 27025,
+          "obcd_offset": 34304,
+          "obim_size": 0
+        },
+        {
+          "id": 40,
+          "obim_offset": 26377,
+          "obcd_offset": 8704,
+          "obim_size": 109
+        },
+        {
+          "id": 41,
+          "obim_offset": 26486,
+          "obcd_offset": 34304,
+          "obim_size": 638
+        },
+        {
+          "id": 42,
+          "obim_offset": 27124,
+          "obcd_offset": 256,
+          "obim_size": 578
+        },
+        {
+          "id": 43,
+          "obim_offset": 27702,
+          "obcd_offset": 35840,
+          "obim_size": 19
+        },
+        {
+          "id": 44,
+          "obim_offset": 27721,
+          "obcd_offset": 31744,
+          "obim_size": 19
+        },
+        {
+          "id": 45,
+          "obim_offset": 27740,
+          "obcd_offset": 35840,
+          "obim_size": 19
+        },
+        {
+          "id": 46,
+          "obim_offset": 27759,
+          "obcd_offset": 31744,
+          "obim_size": 19
+        },
+        {
+          "id": 47,
+          "obim_offset": 27778,
+          "obcd_offset": 53248,
+          "obim_size": 19
+        },
+        {
+          "id": 48,
+          "obim_offset": 27797,
+          "obcd_offset": 31744,
+          "obim_size": 19
+        },
+        {
+          "id": 49,
+          "obim_offset": 27816,
+          "obcd_offset": 53248,
+          "obim_size": 19
+        },
+        {
+          "id": 50,
+          "obim_offset": 27835,
+          "obcd_offset": 31744,
+          "obim_size": 19
+        },
+        {
+          "id": 51,
+          "obim_offset": 27854,
+          "obcd_offset": 256,
+          "obim_size": 19
+        },
+        {
+          "id": 52,
+          "obim_offset": 27873,
+          "obcd_offset": 53248,
+          "obim_size": 19
+        },
+        {
+          "id": 53,
+          "obim_offset": 27892,
+          "obcd_offset": 32256,
+          "obim_size": 19
+        },
+        {
+          "id": 54,
+          "obim_offset": 27911,
+          "obcd_offset": 53248,
+          "obim_size": 0
+        },
+        {
+          "id": 55,
+          "obim_offset": 27626,
+          "obcd_offset": 32256,
+          "obim_size": 19
+        },
+        {
+          "id": 56,
+          "obim_offset": 27645,
+          "obcd_offset": 53248,
+          "obim_size": 19
+        },
+        {
+          "id": 57,
+          "obim_offset": 27664,
+          "obcd_offset": 33280,
+          "obim_size": 19
+        },
+        {
+          "id": 58,
+          "obim_offset": 27683,
+          "obcd_offset": 53248,
+          "obim_size": 0
+        },
+        {
+          "id": 59,
+          "obim_offset": 27607,
+          "obcd_offset": 33280,
+          "obim_size": 0
+        },
+        {
+          "id": 60,
+          "obim_offset": 27569,
+          "obcd_offset": 0,
+          "obim_size": 19
+        },
+        {
+          "id": 61,
+          "obim_offset": 27588,
+          "obcd_offset": 256,
+          "obim_size": 0
+        },
+        {
+          "id": 62,
+          "obim_offset": 27405,
+          "obcd_offset": 258,
+          "obim_size": 145
+        },
+        {
+          "id": 63,
+          "obim_offset": 27550,
+          "obcd_offset": 1027,
+          "obim_size": 100
+        }
+      ]
+    }
+  ]
+}
